@@ -2,6 +2,10 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { RouteItemInterface } from '../../../util/routes/route.item';
 
+interface LinkProps extends RouteItemInterface {
+
+}
+
 const Link: React.FC<RouteItemInterface> = ({ link, text }) => {
   const router = useRouter();
 
