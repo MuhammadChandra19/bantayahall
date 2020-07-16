@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { RouteItemInterface } from '../../../util/routes/route.item';
 
-const Link: React.FC<RouteItemInterface> = ({ link, title, text, description, imageLink }) => {
+const Link: React.FC<RouteItemInterface> = ({ link, text }) => {
   const router = useRouter();
 
   const handleClick = (e: any) => {

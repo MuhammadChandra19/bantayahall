@@ -13,7 +13,11 @@ const Layout: React.FC<LayoutProp> = (props) => {
   return (
     <>
       <Head
-        {...props}
+        description={props.description}
+        pageTitle={props.pageTitle}
+        currentURL={props.currentURL}
+        previewImage={props.previewImage}
+        siteName={props.siteName}
       />
       <AntLayout style={{ height: '100vh' }}>
         <AppHeader />
