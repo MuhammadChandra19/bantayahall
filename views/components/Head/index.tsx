@@ -1,7 +1,7 @@
 import React from 'react'
 import NextHead from 'next/head'
 
-interface HeaderProps {
+export interface HeaderProps {
   pageTitle: string
   description: string
   currentURL?: string
