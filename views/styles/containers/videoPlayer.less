@@ -1,0 +1,124 @@
+.live-container {
+  background-color: #000000;
+  position: relative;
+  overflow: hidden;
+}
+.video-container {
+  margin: auto;
+  width: 100%;
+  max-width: 800px;
+  .video-player{
+    width: 100%;
+    
+  }
+  .video-player::-webkit-media-controls-timeline{
+    color: orangered;
+  }
+  .video-player.live::-webkit-media-controls-timeline, 
+  .video-player.live::-webkit-media-controls-time-remaining-display,
+  .video-player.live::-webkit-media-controls-current-time-display
+  {
+    display: none;
+  }
+
+  
+  
+}
+
+.live-container:hover .control-container.played {
+  transform: translateY(0);
+  display: block;
+}
+.control-container.played {
+  transform: translateY(100%);
+  display: none;
+  transition: all .5s;
+}
+.control-container {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  flex-wrap: wrap;
+  background: rgba(0, 0, 0, 0.438);
+  
+  &__bar {
+    height: 3px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: black;
+    cursor: pointer;
+    &:hover {
+      height: 5px;
+    }
+    &-indcator {
+      height: 3px;
+      background-color: orangered;
+      transition: all .1s;
+      position: relative;
+      cursor: pointer;
+      &:hover {
+        height: 5px;
+      }
+      &:hover::before {
+        position: absolute;
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background-color: orangered;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  &__actions {
+    color: white;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    &_left{
+      display: flex;
+      align-items: center;
+      .anticon {
+        cursor: pointer;
+       
+        font-size: 20px;
+      }
+      &-volume {
+        margin-left: 15px;
+        display: flex;
+        align-items: center;
+        .ant-slider {
+          width: 50px;
+          margin: 4px 10px 4px;
+          display: none;
+          transition: all .2s;
+        }
+      }
+  
+      &-volume:hover {
+        .ant-slider {
+          display: block;
+        }
+      }
+    }
+    &_right {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      margin-right: 10px;
+      .anticon {
+        cursor: pointer;
+       
+        font-size: 20px;
+      }
+    }
+
+    
+    
+  }
+}

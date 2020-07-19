@@ -1,19 +1,12 @@
 import { Store } from "redux";
-import { NextRouter, useRouter } from "next/router";
 import { AppStore, AppState } from "../../../util/redux/store";
 import { SET_LOADING } from "../redux/actions";
 
 export class BaseService {
-  private route: NextRouter;
   private store: Store;
 
   constructor() {
-    this.route = useRouter();
     this.store = AppStore;
-  }
-
-  protected goTo(): NextRouter {
-    return this.route;
   }
 
   protected setLoading(action: string, loading: boolean): void {

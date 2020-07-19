@@ -3,10 +3,10 @@ import { Layout as AntLayout } from 'antd';
 import Head, { HeaderProps } from '../components/Head';
 import '../styles/index.less';
 import AppHeader from '../containers/Header';
-import AppSidebar from '../containers/SideBar';
+import AppSidebar, { AppSidebarProps } from '../containers/SideBar';
 const { Content } = AntLayout;
 
-interface LayoutProp extends HeaderProps {
+interface LayoutProp extends HeaderProps, AppSidebarProps {
 
 }
 const Layout: React.FC<LayoutProp> = (props) => {
@@ -20,12 +20,15 @@ const Layout: React.FC<LayoutProp> = (props) => {
         siteName={props.siteName}
       />
       <AntLayout style={{ height: '100vh' }}>
-        <AppHeader />
+        <AppHeader
+
+        />
         <AntLayout>
-          <AppSidebar />
+          <AppSidebar
+            useDrawer={props.useDrawer}
+          />
           <Content
             style={{
-              padding: 24,
               margin: 0,
               minHeight: 280,
             }}
