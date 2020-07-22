@@ -1,4 +1,4 @@
-import Layout from "../views/Layout"
+import Layout from "../views/Layout/MainLayout"
 import { useEffect } from "react"
 import AppService from "../domain/app/service"
 

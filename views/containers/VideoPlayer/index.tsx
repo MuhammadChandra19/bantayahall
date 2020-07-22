@@ -1,11 +1,11 @@
 import React, {
-  // useState, 
   useEffect,
-  useRef
+  useRef,
+  useState
 } from 'react';
 import '../../styles/containers/videoPlayer.less';
 // import { PlayCircleFilled, PauseCircleFilled, SoundFilled, ExpandOutlined } from '@ant-design/icons';
-// import { Slider } from 'antd';
+import LiveConfirmation from '../LiveConfirmation';
 
 interface VideoPlayerProps {
   src?: string;
@@ -17,6 +17,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   isLive = false
 }) => {
   // const [isPlayed, setIsPlayed] = useState(false);
+  const [isLiveStarted, setStartLive] = useState(false);
   const videoPlayer = useRef<HTMLVideoElement>(null);
   // const videoIndicator = useRef<HTMLDivElement>(null);
 
@@ -60,8 +61,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // }
 
+  const recordLocalStream = (element: HTMLVideoElement) => {
+    const peerConnection = new RTCPeerConnection();
+    navigator.getUserMedia(
+      { video: true, audio: true },
+      stream => {
+        if (element) {
+          element.srcObject = stream;
+        }
+
+        stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+      },
+      error => {
+        console.warn(error.message);
+      });
+  }
+
   useEffect(() => {
-    videoPlayer.current.volume = 0.2;
+    recordLocalStream(videoPlayer.current);
   }, [])
 
   return (
@@ -70,16 +87,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         <video
           // onClick={startStopVideo}
           // onTimeUpdate={videoTimeUpdate}
+          autoPlay
           ref={videoPlayer}
-          className={`video-player ${isLive ? 'live' : ''}`}
+          className={`video-player ${isLiveStarted ? '' : 'gray'}`}
           id="video-player"
-          width="560"
-          src={src}
-          controls
-          controlsList="nodownload"
-          disablePictureInPicture
+          // width="560"
+          muted
         />
       </div>
+      <LiveConfirmation isLiveStarted={isLiveStarted} liveNow={() => setStartLive(true)} />
       {/* <div className={`control-container ${isPlayed ? 'played' : ''}`}>
         <div className="control-container__bar" onClick={changeVideoCurrentTime}>
           <div
@@ -116,6 +132,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
         </div>
       </div> */}
+
     </div>
   );
 };

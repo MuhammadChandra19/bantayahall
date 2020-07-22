@@ -3,10 +3,15 @@ import App, { AppInitialProps } from 'next/app'
 import withRedux from 'next-redux-wrapper';
 import { Provider } from 'react-redux';
 import { AppStore } from '../util/redux/store';
+import { Store } from 'redux';
 
 
+interface Props extends AppInitialProps {
+  store: Store
+}
 
-class MyApp extends App<AppInitialProps> {
+
+class MyApp extends App<Props> {
 
   static async getInitialProps({ Component, ctx }) {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
@@ -17,7 +22,7 @@ class MyApp extends App<AppInitialProps> {
 
   render() {
     //pageProps that were returned  from 'getInitialProps' are stored in the props i.e. pageprops
-    const { Component, pageProps, } = this.props;
+    const { Component, pageProps, store } = this.props;
 
     return (
       <>

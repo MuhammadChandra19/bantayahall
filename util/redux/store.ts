@@ -9,9 +9,13 @@ import {
 } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { CommonReducer } from '../../domain/common/redux/reducers';
+import { CommonState } from '../../domain/common/redux/states';
+import { LayoutState } from '../../domain/layout/redux/states';
+import { LayoutReducer } from '../../domain/layout/redux/reducers';
 
 export interface AppState {
-  common: CommonReducer;
+  common: CommonState;
+  layout: LayoutState;
 }
 
 const logger: Middleware = () => (next) => (action) => {
@@ -30,6 +34,7 @@ export function configureStore(): Store<AppState> {
 
   let rootReducer: ReducersMapObject<AppState, any> = {
     common: new CommonReducer().build(),
+    layout: new LayoutReducer().build(),
   }
 
   return createStore(
@@ -39,3 +44,5 @@ export function configureStore(): Store<AppState> {
 }
 
 export const AppStore = configureStore();
+// console.log(AppStore.getState().layout.isSideBarVisible)
+

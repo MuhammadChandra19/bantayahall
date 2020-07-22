@@ -1,9 +1,9 @@
 import React from 'react';
 import { Layout as AntLayout } from 'antd';
-import Head, { HeaderProps } from '../components/Head';
-import '../styles/index.less';
-import AppHeader from '../containers/Header';
-import AppSidebar, { AppSidebarProps } from '../containers/SideBar';
+import Head, { HeaderProps } from '../../components/Head';
+import '../../styles/index.less';
+import AppHeader from '../../containers/Header';
+import AppSidebar, { AppSidebarProps } from '../../containers/SideBar';
 const { Content } = AntLayout;
 
 interface LayoutProp extends HeaderProps, AppSidebarProps {
@@ -21,7 +21,6 @@ const Layout: React.FC<LayoutProp> = (props) => {
       />
       <AntLayout style={{ height: '100vh' }}>
         <AppHeader
-
         />
         <AntLayout>
           <AppSidebar

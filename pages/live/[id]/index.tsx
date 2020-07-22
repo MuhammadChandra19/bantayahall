@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from '../../../views/Layout';
+import Layout from '../../../views/Layout/MainLayout';
 import VideoPlayer from '../../../views/containers/VideoPlayer';
 
 const Live = () => {

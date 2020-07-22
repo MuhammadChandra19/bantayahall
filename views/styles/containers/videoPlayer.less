@@ -2,14 +2,27 @@
   background-color: #000000;
   position: relative;
   overflow: hidden;
+  height: calc(100vh - 64px);;
 }
 .video-container {
   margin: auto;
   width: 100%;
-  max-width: 800px;
-  .video-player{
+  // height: calc(100% - 50px);;
+  overflow: hidden;
+  // max-width: 1000px;
+  .video-player, .video-player.gray{
     width: 100%;
+    transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    -moz-transform:rotateY(180deg); /* Firefox */
     
+  }
+  .video-player.gray {
+    -webkit-filter: grayscale(100%) blur(5px);
+    -moz-filter: grayscale(100%) blur(5px);
+    -ms-filter: grayscale(100%) blur(5px);
+    -o-filter: grayscale(100%) blur(5px);
+    filter: grayscale(100%) blur(5px);
   }
   .video-player::-webkit-media-controls-timeline{
     color: orangered;
@@ -24,6 +37,7 @@
   
   
 }
+
 
 .live-container:hover .control-container.played {
   transform: translateY(0);
