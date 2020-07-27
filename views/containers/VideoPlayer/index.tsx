@@ -6,6 +6,12 @@ import React, {
 import '../../styles/containers/videoPlayer.less';
 // import { PlayCircleFilled, PauseCircleFilled, SoundFilled, ExpandOutlined } from '@ant-design/icons';
 import LiveConfirmation from '../LiveConfirmation';
+import { Button, Input } from 'antd';
+import { AudioOutlined, AudioMutedOutlined } from '@ant-design/icons';
+import { Timer } from '../../../util/time/timer';
+
+// import { PlayCircleFilled, PauseCircleFilled, SoundFilled } from '@ant-design/icons';
+// import { Slider } from 'antd';
 
 interface VideoPlayerProps {
   src?: string;
@@ -16,18 +22,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   src = "/video/mov_bbb.mp4",
   isLive = false
 }) => {
-  // const [isPlayed, setIsPlayed] = useState(false);
+  const [isPlayed, setIsPlayed] = useState(false);
   const [isLiveStarted, setStartLive] = useState(false);
+  const [liveIsEndded, setLiveIsEnded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const videoPlayer = useRef<HTMLVideoElement>(null);
+  const timeInput = useRef<Input>(null);
+
   // const videoIndicator = useRef<HTMLDivElement>(null);
 
   const startStopVideo = () => {
     if (videoPlayer.current.paused) {
-      // setIsPlayed(true);
+      setIsPlayed(true);
       videoPlayer.current.play();
 
     } else {
-      // setIsPlayed(false);
+      setIsPlayed(false);
       videoPlayer.current.pause();
     }
   }
@@ -61,10 +71,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // }
 
+  const endLiveStream = () => {
+    setStartLive(false);
+    setLiveIsEnded(true);
+  }
+
+  const startLiveStream = () => {
+    let timer = new Timer(timeInput.current)
+    timer.start();
+    setStartLive(true);
+  }
+
+
   const recordLocalStream = (element: HTMLVideoElement) => {
     const peerConnection = new RTCPeerConnection();
     navigator.getUserMedia(
-      { video: true, audio: true },
+      { video: true, audio: isMuted },
       stream => {
         if (element) {
           element.srcObject = stream;
@@ -77,27 +99,45 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       });
   }
 
+
   useEffect(() => {
+
     recordLocalStream(videoPlayer.current);
-  }, [])
+  }, [isMuted])
 
   return (
     <div className="live-container" >
       <div className="video-container">
         <video
-          // onClick={startStopVideo}
-          // onTimeUpdate={videoTimeUpdate}
           autoPlay
           ref={videoPlayer}
           className={`video-player ${isLiveStarted ? '' : 'gray'}`}
           id="video-player"
-          // width="560"
           muted
         />
       </div>
-      <LiveConfirmation isLiveStarted={isLiveStarted} liveNow={() => setStartLive(true)} />
-      {/* <div className={`control-container ${isPlayed ? 'played' : ''}`}>
-        <div className="control-container__bar" onClick={changeVideoCurrentTime}>
+      <LiveConfirmation
+        isVisible={!liveIsEndded && !isLiveStarted}
+        liveNow={startLiveStream}
+      />
+      <div
+        className="live-info"
+        style={{ display: `${isLiveStarted ? 'flex' : 'none'}` }}
+      >
+        <div className="live-info__item" >
+          <Input
+            addonBefore="LIVE"
+
+            ref={timeInput}
+            style={{ width: 120 }}
+          />
+        </div>
+      </div>
+      <div className={`control-container ${isLiveStarted ? 'played' : ''}`}>
+        {/* <div
+          className="control-container__bar"
+        // onClick={changeVideoCurrentTime}
+        >
           <div
             ref={videoIndicator}
             id="video-indicator"
@@ -106,32 +146,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           >
 
           </div>
-        </div>
+        </div> */}
         <div className="control-container__actions">
-          <div className="control-container__actions_left">
-            {
-              !isPlayed ?
-                <PlayCircleFilled onClick={startStopVideo} />
-                : <PauseCircleFilled onClick={startStopVideo} />
-            }
-            <div className="control-container__actions_left-volume">
-              <SoundFilled />
-              <Slider
-                tooltipVisible={false}
-                min={0}
-                max={1}
-                onChange={changeVolume}
-                step={0.01}
-              />
-            </div>
-          </div>
-          <div className="control-container__actions_right">
-            <ExpandOutlined onClick={openFullscreen} />
-          </div>
+          {
+            !isMuted ?
+              <AudioOutlined onClick={() => setIsMuted(true)} />
+              : <AudioMutedOutlined onClick={() => setIsMuted(false)} />
+          }
 
-
+          <Button
+            type="primary"
+            onClick={endLiveStream}
+          >
+            End Live
+          </Button>
         </div>
-      </div> */}
+      </div>
 
     </div>
   );
