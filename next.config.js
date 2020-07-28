@@ -61,4 +61,7 @@ module.exports = withLess({
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
   },
+  env: {
+    'SOCKET': 'http://localhost:5000'
+  }
 });

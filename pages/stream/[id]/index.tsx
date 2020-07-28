@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Layout from '../../../views/Layout/MainLayout';
-import VideoPlayer from '../../../views/containers/VideoPlayer';
+import StreamPlayback from '../../../views/containers/StreamPlayback';
 
-
-const Live = () => {
-
+const Stream = () => {
   return (
     <Layout
       useDrawer
       pageTitle="Live streaming"
       description="A band live streaming"
     >
-      <VideoPlayer />
+      <StreamPlayback />
     </Layout>
   );
 };
 
-export default Live;
+export default Stream;

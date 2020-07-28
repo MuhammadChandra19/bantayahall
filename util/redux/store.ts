@@ -12,10 +12,13 @@ import { CommonReducer } from '../../domain/common/redux/reducers';
 import { CommonState } from '../../domain/common/redux/states';
 import { LayoutState } from '../../domain/layout/redux/states';
 import { LayoutReducer } from '../../domain/layout/redux/reducers';
+import { LiveStreamState } from '../../domain/liveStream/redux/states';
+import { LiveStreamReducer } from '../../domain/liveStream/redux/reducers';
 
 export interface AppState {
   common: CommonState;
   layout: LayoutState;
+  liveStream: LiveStreamState;
 }
 
 const logger: Middleware = () => (next) => (action) => {
@@ -35,6 +38,7 @@ export function configureStore(): Store<AppState> {
   let rootReducer: ReducersMapObject<AppState, any> = {
     common: new CommonReducer().build(),
     layout: new LayoutReducer().build(),
+    liveStream: new LiveStreamReducer().build()
   }
 
   return createStore(

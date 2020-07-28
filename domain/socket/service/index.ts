@@ -1,44 +1,36 @@
-import { BaseService } from "../../common/service/base.service";
+import { baseService } from "../../common/service/base.service";
 import io from 'socket.io-client';
-const { RTCPeerConnection, RTCSessionDescription } = window;
+import { INIT_LIVE_STREAM, RUNNING_LIVE_STREAM, LIVE_STREAM_HOST } from "../redux/actions";
+import { LiveStreamModel, LiveType } from "../../liveStream/interface";
+import { SET_ACTIVE_LIVE_STREAM } from "../../liveStream/redux/actions";
 
-class SocketService extends BaseService {
-  private socket: SocketIOClient.Socket;
-  private peerConnection: RTCPeerConnection;
+const socketService = () => {
 
-  constructor(element: HTMLVideoElement = null) {
-    super();
-    this.socket = io(process.env.SOCKET);
-    this.peerConnection = new RTCPeerConnection();
-    this.init(element);
+  const { dispatch, getState } = baseService()
+  const socket = io(process.env.SOCKET);
 
-  }
+  socket.on(RUNNING_LIVE_STREAM, (liveStream: LiveStreamModel) => {
+    dispatch(SET_ACTIVE_LIVE_STREAM, liveStream);
+  })
 
-  private init(element: HTMLVideoElement = null): void {
-    if (element) {
-      this.recordLocalStream(element);
+  const startLiveStream = (title: string, type: LiveType) => {
+    const liveStream: LiveStreamModel = {
+      liveId: socket.id,
+      socketId: socket.id,
+      stream: {} as MediaStream,
+      title,
+      type,
+      audience: [],
+      thumbnails: 'default'
     }
-
+    socket.emit(INIT_LIVE_STREAM, liveStream)
   }
 
-  public startNewLiveStream(element: HTMLVideoElement): void {
-  }
-
-  private recordLocalStream(element: HTMLVideoElement): void {
-    navigator.getUserMedia(
-      { video: true, audio: true },
-      stream => {
-        if (element) {
-          element.srcObject = stream;
-        }
-
-        stream.getTracks().forEach(track => this.peerConnection.addTrack(track, stream));
-      },
-      error => {
-        console.warn(error.message);
-      });
+  return {
+    socket,
+    startLiveStream
   }
 
 }
 
-export default SocketService;
+export default socketService;

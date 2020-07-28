@@ -9,6 +9,11 @@ import LiveConfirmation from '../LiveConfirmation';
 import { Button, Input } from 'antd';
 import { AudioOutlined, AudioMutedOutlined } from '@ant-design/icons';
 import { Timer } from '../../../util/time/timer';
+import socketService from '../../../domain/socket/service';
+import { LIVE_STREAM_HOST } from '../../../domain/socket/redux/actions';
+import { AppState } from '../../../util/redux/store';
+import { useSelector } from 'react-redux';
+import { LiveStreamModel } from '../../../domain/liveStream/interface';
 
 // import { PlayCircleFilled, PauseCircleFilled, SoundFilled } from '@ant-design/icons';
 // import { Slider } from 'antd';
@@ -16,6 +21,10 @@ import { Timer } from '../../../util/time/timer';
 interface VideoPlayerProps {
   src?: string;
   isLive?: boolean;
+}
+
+interface LiveData {
+  liveData: LiveStreamModel
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -28,6 +37,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isMuted, setIsMuted] = useState(true);
   const videoPlayer = useRef<HTMLVideoElement>(null);
   const timeInput = useRef<Input>(null);
+  const { socket, startLiveStream } = socketService()
+
+  const { liveData } = useSelector<AppState, LiveData>((state) => ({
+    liveData: state.liveStream.liveData
+  }))
 
   // const videoIndicator = useRef<HTMLDivElement>(null);
 
@@ -76,23 +90,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setLiveIsEnded(true);
   }
 
-  const startLiveStream = () => {
+  const startLive = () => {
     let timer = new Timer(timeInput.current)
     timer.start();
+    startLiveStream(
+      "title",
+      "private",
+    )
     setStartLive(true);
+
   }
 
 
   const recordLocalStream = (element: HTMLVideoElement) => {
-    const peerConnection = new RTCPeerConnection();
     navigator.getUserMedia(
       { video: true, audio: isMuted },
       stream => {
         if (element) {
           element.srcObject = stream;
         }
+        if (isLiveStarted) {
+          stream.getTracks().forEach(() => socket.emit(LIVE_STREAM_HOST, liveData));
+        }
 
-        stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
       },
       error => {
         console.warn(error.message);
@@ -103,7 +123,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
 
     recordLocalStream(videoPlayer.current);
-  }, [isMuted])
+  }, [isLiveStarted])
 
   return (
     <div className="live-container" >
@@ -118,7 +138,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       </div>
       <LiveConfirmation
         isVisible={!liveIsEndded && !isLiveStarted}
-        liveNow={startLiveStream}
+        liveNow={startLive}
       />
       <div
         className="live-info"
@@ -134,20 +154,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         </div>
       </div>
       <div className={`control-container ${isLiveStarted ? 'played' : ''}`}>
-        {/* <div
-          className="control-container__bar"
-        // onClick={changeVideoCurrentTime}
-        >
-          <div
-            ref={videoIndicator}
-            id="video-indicator"
-            className="control-container__bar-indcator"
-
-          >
-
-          </div>
-        </div> */}
-        <div className="control-container__actions">
+        <div className="control-container__actions min">
           {
             !isMuted ?
               <AudioOutlined onClick={() => setIsMuted(true)} />
