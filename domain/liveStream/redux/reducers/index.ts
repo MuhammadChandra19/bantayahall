@@ -25,7 +25,9 @@ export class LiveStreamReducer extends Reducer<LiveStreamState> {
       ...state,
       activeLiveStream: {
         ...state.activeLiveStream,
-        [liveData.liveId]: liveData
+        [liveData.userId]: {
+          ...liveData
+        }
       }
     }
   }

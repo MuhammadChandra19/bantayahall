@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Input, Select, Button, Steps } from 'antd';
 import '../../styles/containers/liveStreamConfirmation.less';
+import socketService from '../../../domain/socket/service';
+import { LiveType } from '../../../domain/liveStream/interface';
 const { Option } = Select;
 const { Step } = Steps;
 
@@ -11,6 +13,14 @@ interface LiveConfirmationProps {
 }
 const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [title, setTitle] = useState('');
+  const [liveType, setLivetype] = useState('' as LiveType);
+  const { startLiveStream } = socketService()
+
+  const initLiveStream = () => {
+    startLiveStream(title, liveType)
+    liveNow()
+  }
 
   const renderStep = (
     <Steps current={currentStep}>
@@ -21,8 +31,18 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow 
 
   const liveSetting = (
     <React.Fragment>
-      <Input style={{ width: '100%' }} placeholder="title" />
-      <Select defaultValue="Public" style={{ width: '100%' }} >
+      <Input
+        style={{ width: '100%' }}
+        placeholder="title"
+        onChange={(value) => setTitle(value.target.value)}
+      />
+      <Select
+        defaultValue="Public"
+        style={{ width: '100%' }}
+        onChange={(e) => {
+          setLivetype(e as LiveType)
+        }}
+      >
         <Option value="Public">Public</Option>
         <Option value="Private">Private</Option>
       </Select>
@@ -47,7 +67,7 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow 
       style={{ marginLeft: 'auto' }}
     >
       <Button style={{ marginLeft: 'auto', marginRight: 5 }} onClick={() => setCurrentStep(currentStep - 1)}>Back</Button>
-      <Button style={{ marginLeft: 'auto' }} type="primary" onClick={liveNow}>Live Now</Button>
+      <Button style={{ marginLeft: 'auto' }} type="primary" onClick={initLiveStream}>Live Now</Button>
     </div>
   )
 

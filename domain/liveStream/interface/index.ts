@@ -12,6 +12,7 @@ export interface AddAudience {
 export type LiveType = 'public' | 'private';
 
 export interface LiveStreamModel {
+  userId: string;
   socketId: string;
   liveId: string;
   title: string;

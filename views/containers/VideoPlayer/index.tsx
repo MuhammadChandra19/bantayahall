@@ -37,7 +37,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isMuted, setIsMuted] = useState(true);
   const videoPlayer = useRef<HTMLVideoElement>(null);
   const timeInput = useRef<Input>(null);
-  const { socket, startLiveStream } = socketService()
+  const { socket } = socketService()
 
   const { liveData } = useSelector<AppState, LiveData>((state) => ({
     liveData: state.liveStream.liveData
@@ -93,10 +93,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const startLive = () => {
     let timer = new Timer(timeInput.current)
     timer.start();
-    startLiveStream(
-      "title",
-      "private",
-    )
     setStartLive(true);
 
   }
@@ -110,9 +106,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           element.srcObject = stream;
         }
         if (isLiveStarted) {
-          stream.getTracks().forEach(() => socket.emit(LIVE_STREAM_HOST, liveData));
-        }
+          let sendLivedata = {
+            ...liveData,
+            stream,
+          }
+          if (isLiveStarted) {
+            stream.getTracks().forEach(() => socket.emit(LIVE_STREAM_HOST, sendLivedata));
+          }
 
+        }
       },
       error => {
         console.warn(error.message);
