@@ -18,6 +18,6 @@ export interface LiveStreamModel {
   title: string;
   type: LiveType;
   thumbnails?: string;
-  stream: MediaStream;
+  stream: string;
   audience?: Array<UserModel>
 }

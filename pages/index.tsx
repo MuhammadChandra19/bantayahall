@@ -1,64 +1,49 @@
-import Layout from "../views/Layout/MainLayout"
-import { useEffect, useState } from "react"
-import AppService from "../domain/app/service"
-import { RUNNING_LIVE_STREAM } from "../domain/socket/redux/actions"
-import { LiveStreamModel } from "../domain/liveStream/interface"
-import { useSelector } from "react-redux"
-import { AppState } from "../util/redux/store"
-import { Card, Avatar } from "antd"
-import { Dict } from "../util/types"
-import socketService from "../domain/socket/service"
-const { Meta } = Card;
+import React from 'react';
+import { Carousel } from 'antd';
 
-interface HomeProps {
-  activeLiveStream: Dict<LiveStreamModel>
-}
-
-export const Home = (): JSX.Element => {
-  const { activeLiveStream } = useSelector<AppState, HomeProps>((state: AppState) => ({
-    activeLiveStream: state.liveStream.activeLiveStream
-  }))
-
-  useEffect(() => {
-    socketService()
-  }, [activeLiveStream])
+import LandingLayout from '../views/Layout/LandingLayout';
+import '../views/styles/pages/main.less'
 
 
 
-  const renderActiveLiveStream = (liveStreams: LiveStreamModel, idx: number) => {
-    return (
-      <Card
-        key={idx}
-        style={{ width: 300, cursor: 'pointer' }}
-        cover={
-          <img
-            alt="example"
-            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-          />
-        }
-      >
-        <Meta
-          avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-          title={liveStreams.title}
-          description="This is the description"
-        />
-      </Card>
-    )
-  }
+const Home = () => {
+  const contentStyle: React.CSSProperties = {
+    color: 'black',
+    lineHeight: '160px',
+    textAlign: 'center',
+    // background: '#364d79',
+  };
   return (
-
-    <Layout
-      pageTitle="nyi roro wetan"
-      description="this is only template"
+    <LandingLayout
+      pageTitle="Stream on Bantayahall"
+      description="Stream your favourite music on Bantayahall"
     >
-      {
-        Object.values(activeLiveStream).length ?
-          Object.values(activeLiveStream)
-            .map(renderActiveLiveStream)
-          : null
-      }
-    </Layout>
-  )
-}
+      <section className="hero">
+        <Carousel autoplay>
+          <div className="container">
+            <div className="main-message">
+              <h3 style={contentStyle}>Experience the best Indonesia Music Comunity</h3>
+              <div className="cta">
+                <a href="#" className="btn"></a>
+              </div>
+            </div>
+          </div>
+          <div className="container">
+            <div className="main-message">
+              <h3 style={contentStyle}>Sound lively and inspired. Experience emotions everyday</h3>
+            </div>
+          </div>
+          <div className="container">
+            <div className="main-message">
+              <h3 style={contentStyle}>Find newest updates from your favourite musician</h3>
+            </div>
+          </div>
+        </Carousel>
+      </section>
 
-export default Home
+
+    </LandingLayout>
+  );
+};
+
+export default Home;

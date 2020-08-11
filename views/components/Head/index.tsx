@@ -28,6 +28,7 @@ const Head: React.FC<HeaderProps> = ({
       <meta property="og:site_name" content={siteName} key="ogsitename" />
       <meta property="og:title" content={pageTitle} key="ogtitle" />
       <meta property="og:description" content={description} key="ogdesc" />
+      <script src="//cdn.polyfill.io/v3/polyfill.min.js"></script>
       <title>{pageTitle}</title>
       <link rel="icon" href="/favicon.ico" />
       {process.env.NODE_ENV !== 'production' && (

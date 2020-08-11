@@ -1,7 +1,8 @@
 import React, {
   useEffect,
   useRef,
-  useState
+  useState,
+  useLayoutEffect
 } from 'react';
 import '../../styles/containers/videoPlayer.less';
 // import { PlayCircleFilled, PauseCircleFilled, SoundFilled, ExpandOutlined } from '@ant-design/icons';
@@ -10,8 +11,9 @@ import { Button, Input } from 'antd';
 import { AudioOutlined, AudioMutedOutlined } from '@ant-design/icons';
 import { Timer } from '../../../util/time/timer';
 import socketService from '../../../domain/socket/service';
-import { LIVE_STREAM_HOST } from '../../../domain/socket/redux/actions';
+import { LIVE_STREAM_HOST, LIVE_STREAM_AUDIENCE } from '../../../domain/socket/redux/actions';
 import { AppState } from '../../../util/redux/store';
+import SocketStream from "socket.io-stream"
 import { useSelector } from 'react-redux';
 import { LiveStreamModel } from '../../../domain/liveStream/interface';
 
@@ -29,13 +31,15 @@ interface LiveData {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   src = "/video/mov_bbb.mp4",
-  isLive = false
+  isLive = false,
 }) => {
   const [isPlayed, setIsPlayed] = useState(false);
   const [isLiveStarted, setStartLive] = useState(false);
   const [liveIsEndded, setLiveIsEnded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoPlayer = useRef<HTMLVideoElement>(null);
+  const canvasElement = useRef<HTMLCanvasElement>(null);
+  let context: CanvasRenderingContext2D;
   const timeInput = useRef<Input>(null);
   const { socket } = socketService()
 
@@ -93,29 +97,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const startLive = () => {
     let timer = new Timer(timeInput.current)
     timer.start();
-    setStartLive(true);
+    setInterval(() => {
+      setStartLive(true);
+    }, 500)
+
 
   }
-
-
   const recordLocalStream = (element: HTMLVideoElement) => {
-    navigator.getUserMedia(
-      { video: true, audio: isMuted },
-      stream => {
-        if (element) {
-          element.srcObject = stream;
-        }
+    navigator.getUserMedia({ video: true, audio: isMuted }, stream => {
+      if (element) {
+        element.srcObject = stream;
+      }
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start(1000);
+      mediaRecorder.ondataavailable = (e) => {
         if (isLiveStarted) {
-          let sendLivedata = {
-            ...liveData,
-            stream,
-          }
-          if (isLiveStarted) {
-            stream.getTracks().forEach(() => socket.emit(LIVE_STREAM_HOST, sendLivedata));
-          }
-
+          console.log("started")
+          console.log(socket.id)
+          socket.emit("binarystream", e.data);
         }
-      },
+
+      }
+    },
       error => {
         console.warn(error.message);
       });
@@ -124,7 +127,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
 
-    recordLocalStream(videoPlayer.current);
+    recordLocalStream(videoPlayer.current)
+    if (null !== videoPlayer.current && null !== canvasElement.current) {
+      context = canvasElement.current.getContext('2d');
+      canvasElement.current.width = videoPlayer.current.width
+      canvasElement.current.height = videoPlayer.current.height
+      context.canvas.width = canvasElement.current.width;
+      context.canvas.height = canvasElement.current.height
+    }
   }, [isLiveStarted])
 
   return (
@@ -136,6 +146,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           className={`video-player ${isLiveStarted ? '' : 'gray'}`}
           id="video-player"
           muted
+        />
+        <canvas
+          ref={canvasElement}
+          style={{ display: "none" }}
         />
       </div>
       <LiveConfirmation

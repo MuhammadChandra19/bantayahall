@@ -1,20 +1,39 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { PlayCircleFilled, PauseCircleFilled, SoundFilled, ExpandOutlined } from '@ant-design/icons';
 import '../../styles/containers/videoPlayer.less';
-
-const StreamPlayback = () => {
+import flv from "flv.js";
+import { ENTER_LIVE_ROOM, LIVE_STREAM_AUDIENCE } from '../../../domain/socket/redux/actions';
+interface StreamPlaybackProps {
+  isLive: boolean,
+  mediaId: string | string[]
+}
+const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId }) => {
   const videoPlayer = useRef<HTMLVideoElement>(null);
   const videoIndicator = useRef<HTMLDivElement>(null);
-  const [isPlayed, setIsPlayed] = useState(false);
+  const [isPlayed, setIsPlayed] = useState(true);
+  const liveUrl = `http://localhost:8000/live/${mediaId}.flv`;
+
+  const initLiveStream = (video: HTMLVideoElement) => {
+    if (video && isLive) {
+      var flvPlayer = flv.createPlayer({
+        type: 'flv',
+        url: liveUrl
+      });
+      flvPlayer.attachMediaElement(video);
+      flvPlayer.load();
+      flvPlayer.play();
+    }
+  }
 
   return (
     <div className="live-container">
       <div className="video-container">
         <video
           autoPlay
-          ref={videoPlayer}
+          ref={initLiveStream}
           className="video-player"
           id="video-player"
+
         />
       </div>
       <div className={`control-container ${isPlayed ? 'played' : ''}`}>
