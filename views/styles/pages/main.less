@@ -1,11 +1,26 @@
 
 .hero{
   width: 100%;
-  height: 80vh;
+  background-color: #1fc8db;
+  background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
   // background: linear-gradient(135deg, rgba(49,24,131,0.9) 0%, rgba(72,56,149,0.8) 100%), url("images/header-bg.jpg") center no-repeat;
-  background-size: cover;
+  // background-size: cover;
+  opacity: 0.95;
   position: relative;
   .slick-slide.slick-active.slick-current {
     text-align: center;
+    
+  }
+  .ant-carousel{
+    height: 100vh;
+    .slick-slider.slick-initialized{
+      height: 100%;
+      .main-message{
+        height: 100%;
+        h3 {
+          margin: auto;
+        }
+      }
+    }
   }
 }

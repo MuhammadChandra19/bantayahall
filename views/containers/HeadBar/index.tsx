@@ -9,7 +9,7 @@ const HeadBar = () => {
         <nav>
           <div className="nav-brand">
             <a href="/">
-
+              <img className="nav-logo" src="/image/BNTHLL-LOGO.png" />
             </a>
           </div>
           <div className="menu-icons open">
@@ -29,7 +29,7 @@ const HeadBar = () => {
               <a href="#" className="nav-link">About</a>
             </li>
             <li className="nav-item">
-              <a href="#" className="nav-link">Register</a>
+              <a href="/register" className="nav-link">Register</a>
             </li>
           </ul>
         </nav>

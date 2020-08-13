@@ -62,6 +62,8 @@ module.exports = withLess({
     return config;
   },
   env: {
-    'SOCKET': 'http://localhost:5000'
+    'SOCKET': 'http://localhost:5000',
+    'API_URL': 'http://localhost:8080/',
+    'MEDIA_SERVER': 'http://local.nms:8000/'
   }
 });

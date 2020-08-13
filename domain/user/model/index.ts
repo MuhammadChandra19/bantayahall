@@ -6,8 +6,8 @@ export interface UserBaseModel {
 
 export interface UserRegister {
   username: string;
-  id: number;
   password: string;
+  email: string;
 }
 export interface UserModel extends UserBaseModel {
   firstName?: string;

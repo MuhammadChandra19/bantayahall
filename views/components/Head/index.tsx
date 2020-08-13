@@ -30,7 +30,7 @@ const Head: React.FC<HeaderProps> = ({
       <meta property="og:description" content={description} key="ogdesc" />
       <script src="//cdn.polyfill.io/v3/polyfill.min.js"></script>
       <title>{pageTitle}</title>
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="image/BNTHLL-LOGO.png" />
       {process.env.NODE_ENV !== 'production' && (
         <link rel="stylesheet" type="text/css" href={'/_next/static/css/styles.chunk.css?v=' + Date.now()} />
       )}

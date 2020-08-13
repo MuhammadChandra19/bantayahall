@@ -9,6 +9,7 @@ export class AccountApi extends BaseApi {
   }
 
   public async registerAccount(data: UserRegister): Promise<any> {
+    console.log(process.env.API_URL)
     return this.make('POST', 'api/register', this.selectorRegister(data));
   }
 
