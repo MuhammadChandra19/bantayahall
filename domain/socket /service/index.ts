@@ -13,18 +13,13 @@ const socketService = () => {
   socket.once(RUNNING_LIVE_STREAM, (liveData: LiveStreamModel) => {
     dispatch(SET_ACTIVE_LIVE_STREAM, { ...liveData });
   })
-  const startLiveStream = (title: string, type: LiveType) => {
+  const startLiveStream = (title: string, type: LiveType, id: string) => {
     const liveStream: LiveStreamModel = {
       userId: '969869',
-      liveId: create_UUID(),
-      socketId: socket.id,
-      stream: null,
+      liveId: id,
       title,
       type,
-      audience: [],
-      thumbnails: 'default'
     }
-    socket.emit('rtpm_stream', `rtmp://${location.host.split(':')[0]}/live/${liveStream.liveId}`);
     socket.emit(INIT_LIVE_STREAM, { ...liveStream })
     dispatch(SET_LIVE_STREAM_DATA, liveStream);
   }

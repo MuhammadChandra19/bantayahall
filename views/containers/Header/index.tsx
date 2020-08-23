@@ -1,6 +1,6 @@
 import React from 'react';
-import { Layout as AntLayout } from 'antd';
-import { MenuOutlined } from '@ant-design/icons';
+import { Layout as AntLayout, Avatar } from 'antd';
+import { MenuOutlined, UserOutlined, VideoCameraAddOutlined } from '@ant-design/icons';
 import "../../styles/containers/header.less";
 import layoutService from '../../../domain/layout/service';
 
@@ -11,8 +11,10 @@ const AppHeader = () => {
 
   return (
     <Header className="bnth">
-      <div className="header-container">
-        <MenuOutlined onClick={() => toggleSideBar()} />
+      <MenuOutlined onClick={() => toggleSideBar()} />
+      <div className="action-header">
+        <VideoCameraAddOutlined style={{ margin: 'auto' }} />
+        <Avatar size="large" icon={<UserOutlined />} />
       </div>
     </Header>
   );

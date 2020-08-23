@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Input, Select, Button, Steps } from 'antd';
 import '../../styles/containers/liveStreamConfirmation.less';
-import socketService from '../../../domain/socket/service';
+// import socketService from '../../../domain/socket/service';
 import { LiveType } from '../../../domain/liveStream/interface';
 const { Option } = Select;
 const { Step } = Steps;
@@ -9,16 +9,15 @@ const { Step } = Steps;
 interface LiveConfirmationProps {
   isVisible: boolean;
   liveNow: () => void;
+  liveId: string | string[];
 
 }
-const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow }) => {
+const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow, liveId }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState('');
   const [liveType, setLivetype] = useState('' as LiveType);
-  const { startLiveStream } = socketService()
 
   const initLiveStream = () => {
-    startLiveStream(title, liveType)
     liveNow()
   }
 

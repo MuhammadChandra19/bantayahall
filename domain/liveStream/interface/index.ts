@@ -13,11 +13,14 @@ export type LiveType = 'public' | 'private';
 
 export interface LiveStreamModel {
   userId: string;
-  socketId: string;
   liveId: string;
   title: string;
   type: LiveType;
+}
+
+export interface LiveStreamAPIModel extends LiveStreamModel {
+  startAt: string;
+  finishedAt: string;
+  isPlaying: boolean;
   thumbnails?: string;
-  stream: string;
-  audience?: Array<UserModel>
 }
