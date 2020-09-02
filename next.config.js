@@ -60,11 +60,6 @@ module.exports = withLess({
 
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
-  },
-  env: {
-    'SOCKET': 'http://localhost:5000',
-    'API_URL': 'http://localhost:8080/',
-    'MEDIA_SERVER': 'http://local.nms:8000/',
-    'WEB_2_HLS': 'http://localhost:5001/'
   }
+
 });

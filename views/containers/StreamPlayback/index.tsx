@@ -3,7 +3,8 @@ import { PlayCircleFilled, PauseCircleFilled, SoundFilled, ExpandOutlined } from
 import '../../styles/containers/videoPlayer.less';
 import flv from "flv.js";
 import videojs, { VideoJsPlayerOptions, VideoJsPlayer } from 'video.js'
-import { ENTER_LIVE_ROOM, LIVE_STREAM_AUDIENCE } from '../../../domain/socket/redux/actions';
+import { AppConfig } from '../../../constant/app';
+
 interface StreamPlaybackProps {
   isLive: boolean,
   mediaId: string | string[]
@@ -12,7 +13,7 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId }) => {
   const videoIndicator = useRef<HTMLDivElement>(null);
   const [videoJSplayer, setVideoJSplayer] = useState(null as VideoJsPlayer)
   const [isPlayed, setIsPlayed] = useState(true);
-  const liveUrl = `http://localhost:8888/live/${mediaId}/index.m3u8`;
+  const liveUrl = `${AppConfig.MEDIA_SERVER}/live/${mediaId}/index.m3u8`;
 
   const initLiveStream = (video: HTMLVideoElement) => {
     if (video && isLive) {
@@ -51,7 +52,6 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId }) => {
     //     <video
     //       autoPlay
     //       ref={initLiveStream}
-    //       className="video-js vjs-big-play-centered"
     //       id="video-player"
 
     //     />

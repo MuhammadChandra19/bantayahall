@@ -8,7 +8,7 @@ import { create_UUID } from "../../../util/uuid";
 const socketService = () => {
 
   const { dispatch, getState } = baseService()
-  const socket = io(process.env.SOCKET);
+  const socket = io(process.env.NEXT_PUBLIC_STREAM_SERVICE);
 
   socket.once(RUNNING_LIVE_STREAM, (liveData: LiveStreamModel) => {
     dispatch(SET_ACTIVE_LIVE_STREAM, { ...liveData });

@@ -24,7 +24,6 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
 
   const content = () => (
     <div className="app-sidebar">
-      sider
     </div>
   )
   return (

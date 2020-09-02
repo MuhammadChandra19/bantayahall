@@ -3,6 +3,7 @@ import { Layout as AntLayout, Avatar } from 'antd';
 import { MenuOutlined, UserOutlined, VideoCameraAddOutlined } from '@ant-design/icons';
 import "../../styles/containers/header.less";
 import layoutService from '../../../domain/layout/service';
+import DropdownHeader from '../DropdownHeader'
 
 const { Header } = AntLayout;
 const AppHeader = () => {
@@ -13,7 +14,7 @@ const AppHeader = () => {
     <Header className="bnth">
       <MenuOutlined onClick={() => toggleSideBar()} />
       <div className="action-header">
-        <VideoCameraAddOutlined style={{ margin: 'auto' }} />
+        <DropdownHeader />
         <Avatar size="large" icon={<UserOutlined />} />
       </div>
     </Header>

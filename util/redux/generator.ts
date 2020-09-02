@@ -1,4 +1,4 @@
-import { Action } from '@app/utils/redux/action'
+import { Action } from './action'
 
 export function reducerGenerators(initialState: any, reducer: any) {
   return (state = initialState, action: Action) => {

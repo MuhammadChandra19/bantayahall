@@ -3,7 +3,8 @@ node_modules
 
 # next.js
 .next
-.env*.local
+.env.development
+.env.production
 
 # testing
 coverage

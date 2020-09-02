@@ -137,7 +137,7 @@ export const videoPlayer = {}
 //       mediaRecorder.ondataavailable = (blob: Blob) => {
 //         var count2 = zeroPad(getCount(), 5);
 //         // const url = process.env.WEB_2_HLS + 'chunk/' + randomString() + '/' + count2 + (liveIsEndded ? '/finish' : '')
-//         const url = process.env.SOCKET + '/chunk?prefix=' + liveID + '&num=' + count2 + '&isLast=' + (liveIsEndded ? true : false)
+//         const url = process.env.NEXT_PUBLIC_STREAM_SERVICE + '/chunk?prefix=' + liveID + '&num=' + count2 + '&isLast=' + (liveIsEndded ? true : false)
 //         sendChunks(url, blob);
 
 //       }

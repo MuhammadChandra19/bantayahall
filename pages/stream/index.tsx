@@ -9,7 +9,6 @@ import { Card, Avatar, Row, Col } from "antd"
 import { Dict } from "../../util/types"
 // import socketService from "../../domain/socket/service"
 import { useRouter } from 'next/router'
-import { DUMMY } from "./dummy"
 import liveStreamService from "../../domain/liveStream/service"
 
 const { Meta } = Card;
