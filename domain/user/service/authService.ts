@@ -6,7 +6,8 @@ import { SET_USER_DATA } from '../redux/actions';
 
 export interface AuthServiceInterface {
   login: (credentials: LoginModel) => Promise<void>;
-  logout: () => void
+  logout: () => void;
+  getUserData: () => Promise<void>;
 }
 const authService = (): AuthServiceInterface => {
   const accountApi = new AccountApi();
@@ -46,7 +47,8 @@ const authService = (): AuthServiceInterface => {
 
   return {
     login,
-    logout
+    logout,
+    getUserData
   }
 
 

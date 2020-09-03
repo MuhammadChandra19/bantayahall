@@ -4,7 +4,10 @@ import { VideoCameraAddOutlined } from '@ant-design/icons';
 import LiveConfirmation from '../LiveConfirmation';
 import { create_UUID } from '../../../util/uuid';
 
-const DropDownHeader = () => {
+interface DropDownHeaderInterface {
+  userId: string
+}
+const DropDownHeader: React.FC<DropDownHeaderInterface> = ({ userId }) => {
   const [isOverlayVisible, showOverlay] = useState(false)
   const [isLiveConfirmationVisible, showLiveConfirmation] = useState(false)
   const dropDownItem = (
@@ -15,23 +18,26 @@ const DropDownHeader = () => {
   )
 
   return (
-    <React.Fragment>
-      <Dropdown
-        overlay={dropDownItem}
-        placement="bottomCenter"
-        onVisibleChange={(visible) => showOverlay(visible)}
-        visible={isOverlayVisible}
-      >
-        <VideoCameraAddOutlined style={{ margin: 'auto' }} />
-      </Dropdown>
+    userId ?
+      <React.Fragment>
+        <Dropdown
+          overlay={dropDownItem}
+          placement="bottomCenter"
+          onVisibleChange={(visible) => showOverlay(visible)}
+          visible={isOverlayVisible}
+        >
+          <VideoCameraAddOutlined style={{ margin: 'auto' }} />
+        </Dropdown>
 
-      <LiveConfirmation
-        liveId={create_UUID()}
-        isVisible={isLiveConfirmationVisible}
-        liveNow={() => { showLiveConfirmation(false) }}
-        onCancel={() => showLiveConfirmation(false)}
-      />
-    </React.Fragment>
+        <LiveConfirmation
+          userId={userId}
+          liveId={create_UUID()}
+          isVisible={isLiveConfirmationVisible}
+          liveNow={() => { showLiveConfirmation(false) }}
+          onCancel={() => showLiveConfirmation(false)}
+        />
+      </React.Fragment>
+      : null
   );
 };
 

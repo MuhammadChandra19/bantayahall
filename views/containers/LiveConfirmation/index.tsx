@@ -13,10 +13,11 @@ interface LiveConfirmationProps {
   isVisible: boolean;
   liveNow: () => void;
   onCancel: () => void;
-  liveId: string
+  liveId: string;
+  userId: string;
 
 }
-const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow, onCancel, liveId }) => {
+const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow, onCancel, liveId, userId }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState('');
   const [liveType, setLivetype] = useState('Public' as LiveType);
@@ -26,7 +27,7 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow,
   const initLiveStream = async () => {
     try {
       setSubmitting(true)
-      await initiateLiveStream({ liveId, title, type: liveType, userId: "fse83f" })
+      await initiateLiveStream({ liveId, title, type: liveType, userId })
       liveNow()
     } catch (e) {
       message.error(e)
