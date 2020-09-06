@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Modal, Input, Select, Button, Steps, message } from 'antd';
+import { Modal, Input, Select, Button, message } from 'antd';
 import '../../styles/containers/liveStreamConfirmation.less';
 // import socketService from '../../../domain/socket/service';
 import { LiveType } from '../../../domain/liveStream/interface';
-import { create_UUID } from '../../../util/uuid';
 import CopyClipBoard from '../../components/CopyClipBoard';
 import liveStreamService from '../../../domain/liveStream/service';
 const { Option } = Select;
-const { Step } = Steps;
 
 interface LiveConfirmationProps {
   isVisible: boolean;
@@ -20,6 +18,7 @@ interface LiveConfirmationProps {
 const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow, onCancel, liveId, userId }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('')
   const [liveType, setLivetype] = useState('Public' as LiveType);
   const [isSubmitting, setSubmitting] = useState(false)
   const { initiateLiveStream } = liveStreamService();
@@ -27,7 +26,7 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow,
   const initLiveStream = async () => {
     try {
       setSubmitting(true)
-      await initiateLiveStream({ liveId, title, type: liveType, userId })
+      await initiateLiveStream({ liveId, title, type: liveType, userId, description })
       liveNow()
     } catch (e) {
       message.error(e)
@@ -37,12 +36,6 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow,
 
   }
 
-  const renderStep = (
-    <Steps current={currentStep}>
-      <Step title="Live settings" />
-      <Step title="Live thumbnail" />
-    </Steps>
-  );
 
   const liveSetting = (
     <React.Fragment>
@@ -50,6 +43,12 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow,
         style={{ width: '100%' }}
         placeholder="title"
         onChange={(value) => setTitle(value.target.value)}
+      />
+      <Input.TextArea
+        style={{ width: '100%' }}
+        rows={5}
+        cols={5}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <Select
         defaultValue="Public"
@@ -65,28 +64,6 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow,
     </React.Fragment>
   );
 
-  const takeThumbnail = (
-    <h1>thumbnail</h1>
-  )
-
-  const viewStepIndex = (index: number) => {
-    if (index === 0) {
-      return liveSetting;
-    }
-    return takeThumbnail;
-
-  }
-
-  const renderButtonGroup = (
-    <div
-      className="group"
-      style={{ marginLeft: 'auto' }}
-    >
-      <Button style={{ marginLeft: 'auto', marginRight: 5 }} onClick={() => setCurrentStep(currentStep - 1)}>Back</Button>
-      <Button style={{ marginLeft: 'auto' }} type="primary" loading={isSubmitting} onClick={initLiveStream}>Live Now</Button>
-    </div>
-  )
-
   return (
     <Modal
       onCancel={onCancel}
@@ -97,14 +74,8 @@ const LiveConfirmation: React.FC<LiveConfirmationProps> = ({ isVisible, liveNow,
       className="confirmation-container"
     >
       <div style={{ display: 'grid' }}>
-        {renderStep}
-        {viewStepIndex(currentStep)}
-        {
-          currentStep === 1 ?
-            renderButtonGroup
-            : <Button style={{ marginLeft: 'auto' }} type="primary" onClick={() => setCurrentStep(currentStep + 1)}>Next</Button>
-        }
-
+        {liveSetting}
+        <Button style={{ marginLeft: 'auto' }} type="primary" loading={isSubmitting} onClick={initLiveStream}>Live Now</Button>
       </div>
 
     </Modal>

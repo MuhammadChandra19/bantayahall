@@ -16,6 +16,7 @@ export interface LiveStreamModel {
   liveId: string;
   title: string;
   type: LiveType;
+  description: string;
 }
 
 export interface LiveStreamAPIModel extends LiveStreamModel {

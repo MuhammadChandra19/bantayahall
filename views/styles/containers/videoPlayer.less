@@ -20,33 +20,36 @@
 }
 .video-container {
   margin: auto;
-  width: 100%;
+  width: 720px;
+  height: 100%;
+  background: #252525;
   // height: calc(100% - 50px);;
+
   overflow: hidden;
   // max-width: 1000px;
-  .video-player, .video-player.gray{
+  .video-player{
     width: 100%;
-    transform: rotateY(180deg);
-    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
-    -moz-transform:rotateY(180deg); /* Firefox */
+    // transform: rotateY(180deg);
+    // -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    // -moz-transform:rotateY(180deg); /* Firefox */
     
   }
-  .video-player.gray {
-    -webkit-filter: grayscale(100%) blur(5px);
-    -moz-filter: grayscale(100%) blur(5px);
-    -ms-filter: grayscale(100%) blur(5px);
-    -o-filter: grayscale(100%) blur(5px);
-    filter: grayscale(100%) blur(5px);
-  }
-  .video-player::-webkit-media-controls-timeline{
-    color: orangered;
-  }
-  .video-player.live::-webkit-media-controls-timeline, 
-  .video-player.live::-webkit-media-controls-time-remaining-display,
-  .video-player.live::-webkit-media-controls-current-time-display
-  {
-    display: none;
-  }
+  // .video-player.gray {
+  //   -webkit-filter: grayscale(100%) blur(5px);
+  //   -moz-filter: grayscale(100%) blur(5px);
+  //   -ms-filter: grayscale(100%) blur(5px);
+  //   -o-filter: grayscale(100%) blur(5px);
+  //   filter: grayscale(100%) blur(5px);
+  // }
+  // .video-player::-webkit-media-controls-timeline{
+  //   color: orangered;
+  // }
+  // .video-player.live::-webkit-media-controls-timeline, 
+  // .video-player.live::-webkit-media-controls-time-remaining-display,
+  // .video-player.live::-webkit-media-controls-current-time-display
+  // {
+  //   display: none;
+  // }
 
   
   
@@ -81,7 +84,7 @@
     &:hover {
       height: 5px;
     }
-    &-indcator {
+    &-indicator {
       height: 3px;
       background-color: orangered;
       transition: all .1s;
