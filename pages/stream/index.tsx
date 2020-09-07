@@ -10,6 +10,7 @@ import { Dict } from "../../util/types"
 // import socketService from "../../domain/socket/service"
 import { useRouter } from 'next/router'
 import liveStreamService from "../../domain/liveStream/service"
+import socketService from "../../domain/socket /service"
 
 const { Meta } = Card;
 
@@ -18,11 +19,17 @@ interface StreamProps {
 }
 
 export const Stream = (): JSX.Element => {
-  const { getListOfActiveLiveStream } = liveStreamService()
+  const { getListOfActiveLiveStream, setCurrentWatching } = liveStreamService()
   const { activeLiveStream } = useSelector<AppState, StreamProps>((state: AppState) => ({
     activeLiveStream: state.liveStream.activeLiveStream
   }))
+  socketService()
   const router = useRouter()
+
+  const clickStreamVideos = (liveStreamData: LiveStreamModel) => {
+    setCurrentWatching(liveStreamData)
+    router.push(`/stream/${liveStreamData.liveId}?isLive=true`)
+  }
 
   useEffect(() => {
     // socketService()
@@ -31,11 +38,11 @@ export const Stream = (): JSX.Element => {
 
 
 
-  const renderActiveLiveStream = (liveStreams: LiveStreamModel, idx: number) => {
+  const renderActiveLiveStream = (liveStream: LiveStreamModel, idx: number) => {
     return (
       <Col className="gutter-row" span={6}>
         <Card
-          onClick={() => router.push(`/stream/${liveStreams.liveId}?isLive=true`)}
+          onClick={() => clickStreamVideos(liveStream)}
           key={idx}
           style={{ width: 300, cursor: 'pointer' }}
           cover={
@@ -47,8 +54,8 @@ export const Stream = (): JSX.Element => {
         >
           <Meta
             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-            title={liveStreams.title}
-            description="This is the description"
+            title={liveStream.title}
+            description={liveStream.description}
           />
         </Card>
       </Col>

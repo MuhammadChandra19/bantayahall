@@ -2,12 +2,22 @@ import React, { useRef, useState, useEffect } from 'react';
 import '../../styles/containers/videoPlayer.less';
 import flv from "flv.js";
 import { AppConfig } from '../../../constant/app';
+import { AppState } from '../../../util/redux/store';
+import { UserModel } from '../../../domain/user/model';
+import { useSelector } from 'react-redux';
 
 interface StreamPlaybackProps {
   isLive: boolean,
   mediaId: string | string[]
 }
+
+interface StreamStateProps {
+  userdata: UserModel;
+}
 const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId }) => {
+  const { userdata } = useSelector<AppState, StreamStateProps>((state: AppState) => ({
+    userdata: state.user.user
+  }))
   const [flvPlayer, setFlvPlayer] = useState(null)
   const liveUrl = `${AppConfig.MEDIA_SERVER}live/${mediaId}.flv`;
 
@@ -44,7 +54,6 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId }) => {
           ref={initLiveStream}
           id="video-player"
           controls
-
         />
       </div>
     </div>

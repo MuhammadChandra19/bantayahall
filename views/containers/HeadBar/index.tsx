@@ -29,7 +29,7 @@ const HeadBar = () => {
               <a href="#" className="nav-link">About</a>
             </li>
             <li className="nav-item">
-              <a href="/register" className="nav-link">Register</a>
+              <a href="/login" className="nav-link">Login</a>
             </li>
           </ul>
         </nav>

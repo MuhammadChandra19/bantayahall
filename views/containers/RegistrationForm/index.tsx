@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { UserRegister } from '../../../domain/user/model';
 import { validation } from './validationForm';
-import { useRouter } from 'next/router'
 import { Input, Button, message } from 'antd';
 import userService from '../../../domain/user/service';
 interface RegistrationFormInterface extends UserRegister {
@@ -11,7 +10,6 @@ interface RegistrationFormInterface extends UserRegister {
 const RegistrationForm = () => {
   const [isSubmiing, setSubmiting] = useState(false);
   const { register } = userService();
-  const router = useRouter()
 
   const initialValues: RegistrationFormInterface = {
     email: '',
@@ -26,7 +24,7 @@ const RegistrationForm = () => {
     try {
       delete values.confirmationPassword;
       await register.registerNewUser(values);
-      router.push("/")
+      message.success("Please check your email for activation")
     } catch (e) {
       message.error("Failed to add new user")
     } finally {

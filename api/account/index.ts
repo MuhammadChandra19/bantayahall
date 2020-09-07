@@ -16,6 +16,10 @@ export class AccountApi extends BaseApi {
     return this.make('POST', 'api/authenticate', credentials);
   }
 
+  public async activateAccount(key: string): Promise<void> {
+    return this.make('GET', 'api/activate', { key })
+  }
+
   public async getUser(): Promise<UserModel> {
     return this.make('GET', '/api/account')
       .then((res: any) => {
@@ -23,7 +27,7 @@ export class AccountApi extends BaseApi {
         delete res.login
         let userData: UserModel = {
           ...res,
-          username: login
+          username: login,
         }
         return userData
       })
@@ -33,7 +37,8 @@ export class AccountApi extends BaseApi {
     let selectedData: any = {}
     selectedData = {
       ...data,
-      login: data.username
+      login: data.username,
+      langKey: 'en'
     }
     delete selectedData.username
 

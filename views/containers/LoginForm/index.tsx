@@ -61,7 +61,7 @@ const LoginForm = () => {
       >
         Submit
       </Button>
-      <span style={{ color: 'grey' }}>don't have account?.. <a href="/register">Register</a></span>
+      <span style={{ color: 'grey', margin: 5 }}>don't have account?.. <a href="/register">Register</a></span>
     </form>
   );
 };

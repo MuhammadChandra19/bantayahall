@@ -8,6 +8,8 @@ export interface AuthServiceInterface {
   login: (credentials: LoginModel) => Promise<void>;
   logout: () => void;
   getUserData: () => Promise<void>;
+  activateAccount: (key: string) => Promise<void>;
+  startStreaming: () => Promise<boolean>;
 }
 const authService = (): AuthServiceInterface => {
   const accountApi = new AccountApi();
@@ -41,6 +43,28 @@ const authService = (): AuthServiceInterface => {
     }
   }
 
+  const activateAccount = async (key: string) => {
+    try {
+      await accountApi.activateAccount(key)
+    } catch (e) {
+      throw e
+    }
+  }
+
+  const startStreaming = async (): Promise<boolean> => {
+    let result: boolean;
+    try {
+      const tempLoginStr = localStorage.getItem(STORAGE.TEMP_LOGIN);
+      const loginData = JSON.parse(tempLoginStr) as LoginModel;
+      await login({ ...loginData, rememberMe: true });
+      result = true
+    } catch (e) {
+      result = false
+    } finally {
+      return result
+    }
+  }
+
   const _authenticateSuccess = (token: string) => {
     localStorage.setItem(STORAGE.BN_TOKEN, token);
   }
@@ -48,7 +72,9 @@ const authService = (): AuthServiceInterface => {
   return {
     login,
     logout,
-    getUserData
+    getUserData,
+    activateAccount,
+    startStreaming
   }
 
 

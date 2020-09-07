@@ -2,7 +2,7 @@ import { LiveStreamAPI } from "../../../api/livestream"
 import { LiveStreamModel, LiveStreamAPIModel } from "../interface"
 import { baseService } from "../../common/service/base.service"
 import { Dict } from "../../../util/types"
-import { SET_BULK_ACTIVE_LIVE_STREAM } from "../redux/actions"
+import { SET_BULK_ACTIVE_LIVE_STREAM, SET_LIVE_STREAM_DATA } from "../redux/actions"
 import { SET_LOADING } from "../../common/redux/actions"
 
 const liveStreamService = () => {
@@ -28,6 +28,10 @@ const liveStreamService = () => {
     }
   }
 
+  const setCurrentWatching = (data: LiveStreamModel) => {
+    dispatch(SET_LIVE_STREAM_DATA, data)
+  }
+
   const getListOfActiveLiveStream = async (limit: number = 10, page: number = 0): Promise<void> => {
     try {
       setLoading(SET_BULK_ACTIVE_LIVE_STREAM, true)
@@ -51,7 +55,8 @@ const liveStreamService = () => {
     getCount,
     resetCount,
     initiateLiveStream,
-    getListOfActiveLiveStream
+    getListOfActiveLiveStream,
+    setCurrentWatching
   }
 
 }

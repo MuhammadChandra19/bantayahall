@@ -10,23 +10,12 @@ const socketService = () => {
   const { dispatch, getState } = baseService()
   const socket = io(process.env.NEXT_PUBLIC_STREAM_SERVICE);
 
-  socket.once(RUNNING_LIVE_STREAM, (liveData: LiveStreamModel) => {
+  socket.on(RUNNING_LIVE_STREAM, (liveData: LiveStreamModel) => {
     dispatch(SET_ACTIVE_LIVE_STREAM, { ...liveData });
   })
-  const startLiveStream = (title: string, type: LiveType, id: string) => {
-    const liveStream: LiveStreamModel = {
-      userId: '969869',
-      liveId: id,
-      title,
-      type,
-    }
-    socket.emit(INIT_LIVE_STREAM, { ...liveStream })
-    dispatch(SET_LIVE_STREAM_DATA, liveStream);
-  }
 
   return {
     socket,
-    startLiveStream
   }
 
 }
