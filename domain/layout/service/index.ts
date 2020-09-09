@@ -1,9 +1,10 @@
 import { baseService } from "../../common/service/base.service";
-import { SET_SIDEBAR_VISIBILITY } from "../redux/actions";
+import { SET_SIDEBAR_VISIBILITY, SET_ACTIVE_SIDEBAR_MENU } from "../redux/actions";
 
 
 interface LayputServiceProps {
-  toggleSideBar: (isVisible?: boolean) => void
+  toggleSideBar: (isVisible?: boolean) => void;
+  setActiveSideBarMenu: (key: string) => void
 }
 const layoutService = (): LayputServiceProps => {
   const { dispatch, getState } = baseService()
@@ -20,8 +21,13 @@ const layoutService = (): LayputServiceProps => {
     dispatch(SET_SIDEBAR_VISIBILITY, visibility);
   }
 
+  const setActiveSideBarMenu = (key: string) => {
+    dispatch(SET_ACTIVE_SIDEBAR_MENU, key);
+  }
+
   return {
-    toggleSideBar
+    toggleSideBar,
+    setActiveSideBarMenu
   }
 }
 export default layoutService
