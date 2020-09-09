@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Layout as AntLayout, Drawer, Button } from 'antd';
+import { Layout as AntLayout, Drawer, Button, Menu } from 'antd';
 import { useSelector } from 'react-redux';
 import { LayoutState } from '../../../domain/layout/redux/states';
 import { AppState } from '../../../util/redux/store';
 
 import layoutService from '../../../domain/layout/service';
+import { AlertOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
 const { Sider } = AntLayout;
 
 export interface AppSidebarProps {
@@ -14,6 +16,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   useDrawer = false
 }) => {
   const { toggleSideBar } = layoutService();
+  const router = useRouter();
   const { isSideBarVisible } = useSelector<AppState, LayoutState>(state => ({
     isSideBarVisible: state.layout.isSideBarVisible
   }))
@@ -23,8 +26,13 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   }, [])
 
   const content = () => (
-    <div className="app-sidebar">
-    </div>
+    <Menu
+      defaultSelectedKeys={['1']}
+      mode="inline"
+    >
+      <Menu.Item key="1" icon={<PlayCircleOutlined />} onClick={() => router.push("/stream")}> Stream</Menu.Item>
+      <Menu.Item key="2" icon={<AlertOutlined />} onClick={() => router.push("/upcoming")}> Upcoming</Menu.Item>
+    </Menu>
   )
   return (
     !useDrawer ? (

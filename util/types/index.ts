@@ -12,3 +12,8 @@ export type Handler = (req: IncomingMessage, res: ServerResponse, parsedUrl?: Ur
 export interface APIresponse<T> {
   data: T
 }
+
+export interface BaseParamsInterface {
+  page: number;
+  size: number;
+}

@@ -8,6 +8,7 @@ import { AppState } from '../../../util/redux/store';
 import { UserModel } from '../../../domain/user/model';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router'
+import UserDropDown from '../UserDropDown';
 
 const { Header } = AntLayout;
 const AppHeader = () => {
@@ -22,7 +23,7 @@ const AppHeader = () => {
         <DropdownHeader userId={user?.id} />
         {
           user?.id ?
-            (<Avatar size="large" icon={<UserOutlined />} />) :
+            (<UserDropDown />) :
             (
               <Avatar
                 size="large"

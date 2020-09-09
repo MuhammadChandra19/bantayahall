@@ -29,6 +29,7 @@ const Head: React.FC<HeaderProps> = ({
       <meta property="og:title" content={pageTitle} key="ogtitle" />
       <meta property="og:description" content={description} key="ogdesc" />
       <script src="//cdn.polyfill.io/v3/polyfill.min.js"></script>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet"></link>
       <title>{pageTitle}</title>
       <link rel="icon" href="image/BNTHLL-LOGO.png" />
       {process.env.NODE_ENV !== 'production' && (
