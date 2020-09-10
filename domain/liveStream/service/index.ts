@@ -45,6 +45,16 @@ const liveStreamService = () => {
     }
   }
 
+  const getLiveStreamById = async (id: string): Promise<void> => {
+    try {
+      setLoading(SET_LIVE_STREAM_DATA, true);
+      const { data } = await liveStreamAPI.getLiveStreamById(id);
+      dispatch(SET_LIVE_STREAM_DATA, data[id]);
+    } catch {
+      setLoading(SET_LIVE_STREAM_DATA, false);
+    }
+  }
+
 
 
   const resetCount = () => {
@@ -56,7 +66,8 @@ const liveStreamService = () => {
     resetCount,
     initiateLiveStream,
     getListOfActiveLiveStream,
-    setCurrentWatching
+    setCurrentWatching,
+    getLiveStreamById
   }
 
 }

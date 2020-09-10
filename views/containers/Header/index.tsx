@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Layout as AntLayout, Avatar } from 'antd';
-import { MenuOutlined, UserOutlined, VideoCameraAddOutlined, UserAddOutlined } from '@ant-design/icons';
+import { MenuOutlined, UserAddOutlined } from '@ant-design/icons';
 import "../../styles/containers/header.less";
 import layoutService from '../../../domain/layout/service';
-import DropdownHeader from '../DropdownHeader'
 import { AppState } from '../../../util/redux/store';
 import { UserModel } from '../../../domain/user/model';
 import { useSelector } from 'react-redux';
@@ -20,7 +19,7 @@ const AppHeader = () => {
     <Header className="bnth">
       <MenuOutlined onClick={() => toggleSideBar()} />
       <div className="action-header">
-        <DropdownHeader userId={user?.id} />
+        {/* <DropdownHeader userId={user?.id} /> */}
         {
           user?.id ?
             (<UserDropDown />) :

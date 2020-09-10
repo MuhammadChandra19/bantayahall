@@ -15,13 +15,13 @@ import socketService from "../../domain/socket /service"
 const { Meta } = Card;
 
 interface StreamProps {
-  activeLiveStream: Dict<LiveStreamModel>
+  activeLiveStream: Dict<LiveStreamModel>;
 }
 
 export const Stream = (): JSX.Element => {
   const { getListOfActiveLiveStream, setCurrentWatching } = liveStreamService()
   const { activeLiveStream } = useSelector<AppState, StreamProps>((state: AppState) => ({
-    activeLiveStream: state.liveStream.activeLiveStream
+    activeLiveStream: state.liveStream.activeLiveStream,
   }))
   socketService()
   const router = useRouter()

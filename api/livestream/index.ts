@@ -15,4 +15,8 @@ export class LiveStreamAPI extends BaseApi {
   public async loadListActiveLiveStream(limit: number, page: number): Promise<APIresponse<Dict<LiveStreamAPIModel>>> {
     return this.make('GET', '/livestream', { limit, page })
   }
+
+  public async getLiveStreamById(id: string): Promise<APIresponse<Dict<LiveStreamAPIModel>>> {
+    return this.make('GET', `/livestream`, { id })
+  }
 }
