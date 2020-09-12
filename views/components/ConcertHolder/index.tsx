@@ -13,17 +13,21 @@ interface ConcertHolderInterface {
 const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx }) => {
 
   const convertDate = () => {
-    const arrDate = toDateString(concert.concertDate, 'MMMM Do YYYY h:mm:ss a').split(" ")
+    const arrDate = toDateString(concert.concertDate, 'MMM Do YYYY h:mm:ss a').split(" ")
     return arrDate
+  }
+
+  const convertPrice = () => {
+    const stringifyPrice = concert.concertPrice.toString()
+    const arrPrice = stringifyPrice.slice(0, stringifyPrice.length - 3);
+    return `${arrPrice} K`;
   }
 
   return (
     <div className='concert-holder' key={idx}>
       <Row>
-        <Col xl={12} sm={6}>
+        <Col xl={20} sm={6}>
           <img className="concert-holder--image" src={concert.image ? concert.image : '../image/ticket.jpg'} alt="ticket" />
-        </Col>
-        <Col xl={8} sm={12} style={{ padding: 5 }}>
           <div className="concert-holder--content">
             <div className="concert-holder--content--main">
               <h2>{concert.concertName}</h2>
@@ -37,6 +41,7 @@ const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx }) => {
             <h3>{convertDate()[0]}</h3>
             <h2>{convertDate()[2]}</h2>
           </div>
+          <h1 className="concert-holder--price">{convertPrice()}</h1>
         </Col>
       </Row>
     </div>

@@ -3,6 +3,7 @@ import { LoginModel } from '../model';
 import { STORAGE } from '../../../constant/storage'
 import { baseService } from '../../common/service/base.service';
 import { SET_USER_DATA } from '../redux/actions';
+import { cookieUtil } from '../../../util/cookie';
 
 export interface AuthServiceInterface {
   login: (credentials: LoginModel) => Promise<void>;
@@ -14,6 +15,7 @@ export interface AuthServiceInterface {
 const authService = (): AuthServiceInterface => {
   const accountApi = new AccountApi();
   const { dispatch, setLoading } = baseService()
+  const { setCookie, deleteCookie } = cookieUtil();
 
   const login = async (credentials: LoginModel) => {
     try {
@@ -31,15 +33,20 @@ const authService = (): AuthServiceInterface => {
   }
 
   const logout = () => {
+    deleteCookie(STORAGE.BN_TOKEN);
     localStorage.removeItem(STORAGE.BN_TOKEN);
+
   }
 
   const getUserData = async () => {
     try {
+      setLoading(SET_USER_DATA, true);
       const userdata = await accountApi.getUser()
       dispatch(SET_USER_DATA, userdata)
     } catch (e) {
       throw e
+    } finally {
+      setLoading(SET_USER_DATA, false);
     }
   }
 
@@ -67,6 +74,7 @@ const authService = (): AuthServiceInterface => {
 
   const _authenticateSuccess = (token: string) => {
     localStorage.setItem(STORAGE.BN_TOKEN, token);
+    setCookie(STORAGE.BN_TOKEN, token);
   }
 
   return {

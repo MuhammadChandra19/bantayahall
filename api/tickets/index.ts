@@ -7,7 +7,7 @@ export class TicketsAPI extends BaseApi {
     super(AppConfig.API_URL)
   }
 
-  public async getTicketById(id: string): Promise<{ status: boolean }> {
-    return this.make('GET', `api/tickets/user/${id}`);
+  public async getTicketById(id: string, concertid: string): Promise<{ status: boolean }> {
+    return this.make('GET', `api/tickets/user/${id}/${concertid}`);
   }
 }

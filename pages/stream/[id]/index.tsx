@@ -21,7 +21,7 @@ const Stream = () => {
   const submitTicket = async () => {
     try {
       setSubmittingTicketId(true);
-      const isTicketIdValid = await getUserTicket(ticketId);
+      const isTicketIdValid = await getUserTicket(ticketId, id as string);
       if (isTicketIdValid) {
         setShowTicketConfirmation(false);
         localStorage.setItem(`${id}_bantayahall`, ticketId)

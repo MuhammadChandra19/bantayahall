@@ -11,6 +11,7 @@ import { Dict } from "../../util/types"
 import { useRouter } from 'next/router'
 import liveStreamService from "../../domain/liveStream/service"
 import socketService from "../../domain/socket /service"
+import { STORAGE } from "../../constant/storage"
 
 const { Meta } = Card;
 
@@ -27,8 +28,15 @@ export const Stream = (): JSX.Element => {
   const router = useRouter()
 
   const clickStreamVideos = (liveStreamData: LiveStreamModel) => {
-    setCurrentWatching(liveStreamData)
-    router.push(`/stream/${liveStreamData.liveId}?isLive=true`)
+    const token = localStorage.getItem(STORAGE.BN_TOKEN);
+    if (token) {
+      setCurrentWatching(liveStreamData)
+      router.push(`/stream/${liveStreamData.liveId}?isLive=true`)
+    }
+    else {
+      router.replace("/login");
+    }
+
   }
 
   useEffect(() => {

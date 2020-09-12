@@ -10,6 +10,8 @@ import { SET_ACTIVE_LIVE_STREAM } from '../../../domain/liveStream/redux/actions
 import liveStreamService from '../../../domain/liveStream/service';
 import { Skeleton, message, Result } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
+import { SET_USER_DATA } from '../../../domain/user/redux/actions';
+import Chat from '../Chat';
 
 interface StreamPlaybackProps {
   isLive: boolean,
@@ -21,10 +23,12 @@ interface StreamStateProps {
   userdata: UserModel;
   isLoading: boolean;
   liveStreamData: LiveStreamModel;
+  loadingUserData: boolean
 }
 const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyToPlay }) => {
-  const { userdata, isLoading, liveStreamData } = useSelector<AppState, StreamStateProps>((state: AppState) => ({
+  const { userdata, isLoading, liveStreamData, loadingUserData } = useSelector<AppState, StreamStateProps>((state: AppState) => ({
     userdata: state.user.user,
+    loadingUserData: state.common.loading[SET_USER_DATA],
     isLoading: state.common.loading[SET_ACTIVE_LIVE_STREAM],
     liveStreamData: state.liveStream.liveData
   }))
@@ -68,6 +72,10 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
     }
   }, [])
 
+  const chatSection = () => {
+    return !loadingUserData ? <Chat roomId={mediaId as string} userData={userdata} /> : null
+  }
+
   return (
     isLoading || !readyToPlay ?
       (
@@ -95,8 +103,12 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
                   </p>
                 </div>
               </Skeleton>
+            </div >
+            <div>
+              {
+                chatSection()
+              }
             </div>
-
           </div>
         </div>
       )
