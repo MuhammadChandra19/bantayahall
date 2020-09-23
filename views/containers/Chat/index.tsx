@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import socketService from '../../../domain/socket /service';
 import moment from 'moment';
-import { ENTER_LIVE_ROOM, INCOMING_MESSAGE, SEND_MESSAGE } from '../../../domain/socket /redux/actions';
+import { INCOMING_MESSAGE, SERVER_MESSAGE } from '../../../domain/socket /redux/actions';
 
-import { Input, Button, Comment, Avatar, List, Row, Col } from 'antd';
+import { Input, Button, Comment, Avatar, List, Row, Col, message as antMessage, notification } from 'antd';
 import { UserModel } from '../../../domain/user/model';
-import ScrollToBottom from 'react-scroll-to-bottom';
 import '../../styles/containers/chat.less';
+import liveStreamService from '../../../domain/liveStream/service';
 
 const { TextArea } = Input;
 
 interface ChatInterface {
   roomId: string;
   userData: UserModel;
-  loading?: boolean
+  loading?: boolean;
+  isFullScreen: boolean;
 }
 
 interface MessageInterface {
@@ -22,35 +23,55 @@ interface MessageInterface {
   date: string;
 }
 
-const Chat: React.FC<ChatInterface> = ({ roomId, userData, loading }) => {
-  const { socket } = socketService();
+const Chat: React.FC<ChatInterface> = ({ roomId, userData, isFullScreen }) => {
+
+  const { enterLiveRoom, sendMessageToRoom } = liveStreamService();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([] as Array<MessageInterface>);
+  const [isSubmittingMessage, setSubmittingMessage] = useState(false);
 
   useEffect(() => {
-    socket.emit(ENTER_LIVE_ROOM, { name: userData.username, room: roomId })
+    const { socket } = socketService();
     socket.on(INCOMING_MESSAGE, (message: MessageInterface) => {
       setMessages(messages => [message, ...messages])
     })
+    socket.on(SERVER_MESSAGE, (info: string) => {
+      showNewJoiner(info)
+    })
+    initEnterLiveRoom()
     return (() => {
       socket.emit('disconnect');
     })
   }, [roomId]);
 
+  const initEnterLiveRoom = async () => {
+    try {
+      await enterLiveRoom(userData.username, roomId);
+    } catch (e) {
+      //do nothing
+    }
+  }
 
+  const showNewJoiner = (name) => {
+    notification.info({
+      message: `${name} has joined the room`,
+      placement: 'bottomLeft',
+      duration: 1000
+    })
+  }
 
-  // useEffect(() => {
-  //   socket.on(INCOMING_MESSAGE, (message: MessageInterface) => {
-  //     setMessages([...messages, message])
-  //   })
-  // }, []);
-
-  const sendMessage = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const sendMessage = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (message) {
-      socket.emit(SEND_MESSAGE, { message, name: userData.username, room: roomId, date: new Date().toISOString() });
-
-      setMessage('');
+      try {
+        setSubmittingMessage(true)
+        const { } = await sendMessageToRoom({ message, name: userData.username, room: roomId, date: new Date().toISOString() })
+        setMessage('');
+      } catch (e) {
+        antMessage.error('Cannot send message');
+      } finally {
+        setSubmittingMessage(false)
+      }
     }
   }
 
@@ -62,7 +83,7 @@ const Chat: React.FC<ChatInterface> = ({ roomId, userData, loading }) => {
         renderItem={(props, idx) =>
 
           <Comment
-            key={props.date}
+            key={props.date + idx}
             author={<p style={{ color: 'white', marginBottom: 0 }}>{props.name}</p>}
             avatar='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
             content={<p style={{ color: 'white' }}>{props.message}</p>}
@@ -87,7 +108,7 @@ const Chat: React.FC<ChatInterface> = ({ roomId, userData, loading }) => {
         }
         content={
           <Row>
-            <Col span={20}>
+            <Col span={19}>
               <Input
                 onChange={({ target: { value } }) => setMessage(value)}
                 value={message}
@@ -98,6 +119,7 @@ const Chat: React.FC<ChatInterface> = ({ roomId, userData, loading }) => {
                 htmlType="submit"
                 onClick={e => sendMessage(e as unknown as React.KeyboardEvent<HTMLInputElement>)}
                 type="primary"
+                loading={isSubmittingMessage}
               >
                 Add Comment
               </Button>

@@ -1,4 +1,5 @@
 import { TicketsAPI } from "../../../api/tickets";
+import { BuyTicketInterface } from "../interface";
 
 const ticketService = () => {
   const ticketAPI = new TicketsAPI();
@@ -12,8 +13,17 @@ const ticketService = () => {
     }
   }
 
+  const buyConcertTicket = async (ticket: BuyTicketInterface): Promise<void> => {
+    try {
+      await ticketAPI.buyTickets(ticket);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   return {
-    getUserTicket
+    getUserTicket,
+    buyConcertTicket
   }
 }
 

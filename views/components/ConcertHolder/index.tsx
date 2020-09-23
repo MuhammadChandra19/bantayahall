@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ConcertsModel } from '../../../domain/concert/interface';
 import { Row, Col, Button } from 'antd';
 import '../../styles/components/concertHolder.less';
 import { toCurrency } from '../../../util/converter/currency';
 import { toDateString } from '../../../util/converter/date';
 import { Moment } from 'moment';
+import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
 interface ConcertHolderInterface {
   concert: ConcertsModel;
@@ -33,15 +34,26 @@ const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx }) => {
               <h2>{concert.concertName}</h2>
               <h3>{concert.concertDesc}</h3>
             </div>
+            <div className="concert-holder--content--date">
+              <h1>{convertDate()[1]}</h1>
+              <h3>{convertDate()[0]}</h3>
+              <h2>{convertDate()[2]}</h2>
+            </div>
           </div>
         </Col>
         <Col xl={4}>
-          <div className="concert-holder--date">
-            <h1>{convertDate()[1]}</h1>
-            <h3>{convertDate()[0]}</h3>
-            <h2>{convertDate()[2]}</h2>
+          <div className="concert-holder--action">
+            <h1 className="concert-holder--action--price">{convertPrice()}</h1>
+            <img src="image/BNTHLL-LOGO-min.png" />
+            <div className="concert-holder--action--button">
+              <div className="ticket-action">
+                <MinusCircleOutlined />
+                <p>2</p>
+                <PlusCircleOutlined />
+              </div>
+              <Button type="primary">Buy</Button>
+            </div>
           </div>
-          <h1 className="concert-holder--price">{convertPrice()}</h1>
         </Col>
       </Row>
     </div>

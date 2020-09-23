@@ -21,7 +21,7 @@ const Upcoming = () => {
 
   const concertHolder = (concert: ConcertsModel, idx: number) => {
     return (
-      <Col xl={12} sm={24}>
+      <Col key={`concert-holder-${idx}`} xl={12} sm={24}>
         <ConcertHolder
           concert={concert}
           idx={idx}

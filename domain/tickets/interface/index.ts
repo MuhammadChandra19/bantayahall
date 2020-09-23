@@ -5,3 +5,8 @@ export interface TicketInterface {
   paymentId: number;
   userId: number;
 }
+
+export interface BuyTicketInterface {
+  concertId?: number;
+  qty?: number;
+}

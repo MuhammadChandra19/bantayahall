@@ -1,24 +1,14 @@
 import { LiveStreamAPI } from "../../../api/livestream"
-import { LiveStreamModel, LiveStreamAPIModel } from "../interface"
+import { LiveStreamModel, IMessageClient } from "../interface"
 import { baseService } from "../../common/service/base.service"
-import { Dict } from "../../../util/types"
-import { SET_BULK_ACTIVE_LIVE_STREAM, SET_LIVE_STREAM_DATA } from "../redux/actions"
-import { SET_LOADING } from "../../common/redux/actions"
+import { SET_BULK_ACTIVE_LIVE_STREAM, SET_LIVE_STREAM_DATA, JOIN_LIVE_STREAMING_ROOM } from "../redux/actions"
+import { SEND_MESSAGE } from "../../socket /redux/actions"
+import { SocketQueue } from "../../../api/socketQueue"
 
 const liveStreamService = () => {
   const liveStreamAPI = new LiveStreamAPI()
+  const socketQueueAPI = new SocketQueue()
   const { dispatch, setLoading } = baseService()
-  const getCount = () => {
-    let result = 0
-    const countChunks = localStorage.getItem('countChunks')
-    if (!countChunks) {
-      localStorage.setItem('countChunks', "0")
-    } else {
-      result = parseInt(countChunks) + 1;
-      localStorage.setItem('countChunks', result.toString())
-    }
-    return result;
-  }
 
   const initiateLiveStream = async (data: LiveStreamModel) => {
     try {
@@ -50,24 +40,44 @@ const liveStreamService = () => {
       setLoading(SET_LIVE_STREAM_DATA, true);
       const { data } = await liveStreamAPI.getLiveStreamById(id);
       dispatch(SET_LIVE_STREAM_DATA, data[id]);
-    } catch {
+    } catch (e) {
+      throw e
+    } finally {
       setLoading(SET_LIVE_STREAM_DATA, false);
     }
   }
 
+  const enterLiveRoom = async (name: string, room: string): Promise<void> => {
+    try {
+      setLoading(JOIN_LIVE_STREAMING_ROOM, true);
+      await socketQueueAPI.joinLiveStream(name, room);
+    } catch (e) {
+      throw e
+    } finally {
+      setLoading(JOIN_LIVE_STREAMING_ROOM, false);
+    }
+  }
 
-
-  const resetCount = () => {
-    localStorage.removeItem('countChunks')
+  const sendMessageToRoom = async (message: IMessageClient): Promise<IMessageClient> => {
+    try {
+      setLoading(SEND_MESSAGE, true);
+      const { data } = await socketQueueAPI.sendMessage(message)
+      return data;
+    } catch (e) {
+      throw e
+    } finally {
+      setLoading(SEND_MESSAGE, false);
+      return {} as IMessageClient
+    }
   }
 
   return {
-    getCount,
-    resetCount,
     initiateLiveStream,
     getListOfActiveLiveStream,
     setCurrentWatching,
-    getLiveStreamById
+    getLiveStreamById,
+    enterLiveRoom,
+    sendMessageToRoom
   }
 
 }

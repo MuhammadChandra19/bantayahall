@@ -25,3 +25,10 @@ export interface LiveStreamAPIModel extends LiveStreamModel {
   isPlaying: boolean;
   thumbnails?: string;
 }
+
+export interface IMessageClient {
+  name: string;
+  room: string;
+  message: string;
+  date: string;
+}

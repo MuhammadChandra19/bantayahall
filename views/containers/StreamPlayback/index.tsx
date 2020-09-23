@@ -36,6 +36,7 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
   const liveUrl = `${AppConfig.MEDIA_SERVER}live/${mediaId}.flv`;
   const videoElement = useRef<HTMLVideoElement>(null);
   const { getLiveStreamById } = liveStreamService();
+  const [isFullScreen, setFullScreen] = useState(false)
 
 
   const initLiveStream = (video: HTMLVideoElement) => {
@@ -49,6 +50,7 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
       flvPlayer.play();
       setFlvPlayer(flvPlayer)
     }
+
   }
 
   const checkTicket = async () => {
@@ -63,6 +65,12 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
 
   useEffect(() => {
     checkTicket()
+    const pref = ["", "webkit", "moz", "ms"]
+    pref.forEach(
+      prefix => document.addEventListener(prefix + "fullscreenchange", () => {
+        setFullScreen(!isFullScreen)
+      }, false)
+    );
     return () => {
       if (flvPlayer) {
         flvPlayer.unload();
@@ -73,7 +81,12 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
   }, [])
 
   const chatSection = () => {
-    return !loadingUserData ? <Chat roomId={mediaId as string} userData={userdata} /> : null
+    return !loadingUserData ?
+      <Chat
+        isFullScreen={isFullScreen}
+        roomId={mediaId as string}
+        userData={userdata}
+      /> : null
   }
 
   return (
@@ -93,11 +106,16 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
               ref={videoElement}
               id="video-player"
               controls
+
+
             />
             <div style={{ margin: '10px' }}>
               <Skeleton loading={isLoading}>
                 <div>
-                  <h4 style={{ color: 'white', fontSize: 17 }}>{liveStreamData?.title}</h4>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <h4 style={{ color: 'white', fontSize: 17 }}>{liveStreamData?.title}</h4>
+                    // <h4 style={{ color: 'white', fontSize: 17 }}>0 views</h4>
+                  </div>
                   <p style={{ color: 'white' }}>
                     {liveStreamData?.description}
                   </p>

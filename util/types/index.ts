@@ -17,3 +17,5 @@ export interface BaseParamsInterface {
   page: number;
   size: number;
 }
+
+export type CommonHttpReturn<T> = { data: T }
