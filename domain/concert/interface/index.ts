@@ -1,10 +1,11 @@
 import { Moment } from 'moment';
 
 export interface ConcertsModel {
-  id: number;
+  concertId: number;
   image: string;
   concertName: string;
   concertDesc: string;
   concertDate: Moment;
   concertPrice: number;
+  count: number;
 }

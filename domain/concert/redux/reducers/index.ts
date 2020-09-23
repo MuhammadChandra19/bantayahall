@@ -8,14 +8,31 @@ export class ConcertsReducer extends Reducer<ConcertsStates> {
 
   constructor() {
     super({
-      availableConcerts: []
+      availableConcerts: {}
     })
   }
 
-  public setListConcerts(states: ConcertsStates, listConcerts: Array<ConcertsModel>): ConcertsStates {
+  public setListConcerts(states: ConcertsStates, listConcerts: Dict<ConcertsModel>): ConcertsStates {
     return {
       ...states,
-      availableConcerts: listConcerts
+      availableConcerts: {
+        ...states.availableConcerts,
+        ...listConcerts
+
+      }
+    }
+  }
+
+  public updateCountTicket(states: ConcertsStates, { id, count }): ConcertsStates {
+    return {
+      ...states,
+      availableConcerts: {
+        ...states.availableConcerts,
+        [id]: {
+          ...states.availableConcerts[id],
+          count
+        }
+      }
     }
   }
 

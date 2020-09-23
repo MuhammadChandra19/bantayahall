@@ -9,6 +9,6 @@ export class ConcertsAPI extends BaseApi {
   }
 
   public async GetConcertList(params: BaseParamsInterface): Promise<Array<ConcertsModel>> {
-    return this.make('GET', 'api/concerts', { ...params });
+    return this.make('GET', 'api/concerts/count-ticket', { ...params });
   }
 }

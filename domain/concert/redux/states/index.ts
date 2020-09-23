@@ -1,5 +1,6 @@
 import { ConcertsModel } from "../../interface";
+import { Dict } from "../../../../util/types";
 
 export interface ConcertsStates {
-  availableConcerts: Array<ConcertsModel>;
+  availableConcerts: Dict<ConcertsModel>;
 }

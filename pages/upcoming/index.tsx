@@ -2,17 +2,51 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../../views/Layout/MainLayout';
 import concertsService from '../../domain/concert/service';
 import { ConcertsModel } from '../../domain/concert/interface';
-import ConcertHolder from '../../views/components/ConcertHolder';
-import { Row, Col } from 'antd';
+import ConcertHolder from '../../views/containers/ConcertHolder';
+import { Row, Col, Modal } from 'antd';
+import { AppState } from '../../util/redux/store';
+import { useSelector } from 'react-redux';
+import { Dict } from '../../util/types';
+import ticketService from '../../domain/tickets/service';
+import Icon from '@ant-design/icons/lib/components/AntdIcon';
+import { CheckCircleTwoTone } from '@ant-design/icons';
 
 
+const { confirm } = Modal
 const Upcoming = () => {
-  const { getListConcerts } = concertsService();
-  const [dataConcerts, setData] = useState([])
+  const { getListConcerts, updateCountTicket } = concertsService();
+  const { buyConcertTicket } = ticketService()
+  const dataConcerts = useSelector<AppState, Dict<ConcertsModel>>(state => state.concert.availableConcerts)
+
 
   const loadDataConcerts = async () => {
-    const data = await getListConcerts({ page: 0, size: 10 });
-    setData(data)
+    await getListConcerts({ page: 0, size: 10 });
+  }
+
+  const buyTicketConfirmation = (concertId: number, qty: number) => {
+    confirm({
+      title: 'Ticket Confirmation',
+      icon: <img
+        style={{
+          float: 'left',
+          width: 20,
+          margin: 'auto',
+          WebkitFilter: 'grayscale(100%)',
+          filter: 'grayscale(100%)'
+        }}
+        src="image/BNTHLL-LOGO-min.png"
+      />,
+      content: <p style={{ marginLeft: 20 }}>proceed to buy {qty} {qty > 1 ? 'tickets' : 'ticket'}?</p>,
+      async onOk() {
+        return buyConcertTicket({ concertId, qty })
+          .then(() => {
+            Modal.success({
+              title: `Success buy ${qty > 1 ? 'tickets' : 'ticket'}`,
+              content: 'Please check your email to confirm your payment'
+            })
+          })
+      }
+    })
   }
 
   useEffect(() => {
@@ -25,6 +59,9 @@ const Upcoming = () => {
         <ConcertHolder
           concert={concert}
           idx={idx}
+          onConfirmationBuying={buyTicketConfirmation}
+
+          onDecrementIcrementTicket={updateCountTicket}
         />
       </Col>
 
@@ -38,7 +75,7 @@ const Upcoming = () => {
     >
       <Row gutter={[8, 8]}>
         {
-          dataConcerts.map(concertHolder)
+          Object.values(dataConcerts).map(concertHolder)
         }
       </Row>
     </Layout>

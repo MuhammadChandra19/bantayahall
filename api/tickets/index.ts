@@ -12,6 +12,6 @@ export class TicketsAPI extends BaseApi {
   }
 
   public async buyTickets(ticket: BuyTicketInterface): Promise<void> {
-    return this.make('POST', 'api/tickets', ticket);
+    return this.make('POST', 'api/tickets/buy', ticket);
   }
 }

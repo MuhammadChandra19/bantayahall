@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { ConcertsModel } from '../../../domain/concert/interface';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, message } from 'antd';
 import '../../styles/components/concertHolder.less';
-import { toCurrency } from '../../../util/converter/currency';
 import { toDateString } from '../../../util/converter/date';
-import { Moment } from 'moment';
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../../util/redux/store';
+import { BuyTicketInterface } from '../../../domain/tickets/interface';
 
 interface ConcertHolderInterface {
   concert: ConcertsModel;
   idx: number;
+  onDecrementIcrementTicket: (id: number, count: number) => void
+  onConfirmationBuying: (id: number, qty: number) => void
 }
-const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx }) => {
-
+const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx, onDecrementIcrementTicket, onConfirmationBuying }) => {
+  const ticket = useSelector<AppState, number>(state => state.concert.availableConcerts[concert.concertId].count)
+  const [initialCount, _] = useState(concert.count)
   const convertDate = () => {
     const arrDate = toDateString(concert.concertDate, 'MMM Do YYYY h:mm:ss a').split(" ")
     return arrDate
@@ -22,6 +26,18 @@ const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx }) => {
     const stringifyPrice = concert.concertPrice.toString()
     const arrPrice = stringifyPrice.slice(0, stringifyPrice.length - 3);
     return `${arrPrice} K`;
+  }
+
+
+  const updateTicketCount = (isIncrement: boolean) => {
+    if (isIncrement) {
+      onDecrementIcrementTicket(concert.concertId, concert.count++)
+    } else {
+      if (concert.count > 0 && concert.count > initialCount) {
+        onDecrementIcrementTicket(concert.concertId, concert.count--)
+      }
+
+    }
   }
 
   return (
@@ -47,11 +63,19 @@ const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx }) => {
             <img src="image/BNTHLL-LOGO-min.png" />
             <div className="concert-holder--action--button">
               <div className="ticket-action">
-                <MinusCircleOutlined />
-                <p>2</p>
-                <PlusCircleOutlined />
+                <MinusCircleOutlined
+                  onClick={() => updateTicketCount(false)}
+                />
+                <p>{ticket}</p>
+                <PlusCircleOutlined
+                  onClick={() => updateTicketCount(true)}
+                />
               </div>
-              <Button type="primary">Buy</Button>
+              <Button
+                onClick={() => onConfirmationBuying(concert.concertId, ticket - initialCount)}
+                type="primary"
+                disabled={ticket - initialCount === 0}
+              >Buy</Button>
             </div>
           </div>
         </Col>
