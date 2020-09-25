@@ -14,6 +14,7 @@ export interface UserModel extends UserBaseModel {
   lastName?: string;
   email?: string;
   activated?: boolean;
+  imageUrl: string;
   langKey?: string;
   authorities?: string[];
   createdBy?: string;

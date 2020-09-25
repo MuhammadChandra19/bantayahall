@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../../views/Layout/MainLayout';
 import concertsService from '../../domain/concert/service';
 import { ConcertsModel } from '../../domain/concert/interface';
@@ -8,8 +8,6 @@ import { AppState } from '../../util/redux/store';
 import { useSelector } from 'react-redux';
 import { Dict } from '../../util/types';
 import ticketService from '../../domain/tickets/service';
-import Icon from '@ant-design/icons/lib/components/AntdIcon';
-import { CheckCircleTwoTone } from '@ant-design/icons';
 
 
 const { confirm } = Modal
