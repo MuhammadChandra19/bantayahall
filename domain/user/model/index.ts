@@ -2,6 +2,7 @@
 export interface UserBaseModel {
   id?: any;
   username?: string;
+
 }
 
 export interface UserRegister {
@@ -9,16 +10,23 @@ export interface UserRegister {
   password: string;
   email: string;
 }
-export interface UserModel extends UserBaseModel {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  activated?: boolean;
-  imageUrl: string;
-  langKey?: string;
-  authorities?: string[];
+
+export interface UserMainModel extends UserBaseModel {
+  email?: string,
+  firstName?: string,
+  langKey?: string,
+  lastName?: string,
+  address?: string,
+  postalCode?: string,
+  phone?: string,
+}
+export interface UserModel extends UserMainModel {
+  activated?: boolean,
+  authorities?: string[],
   createdBy?: string;
   createdDate?: Date;
+  login?: string,
+  imageUrl?: string
   lastModifiedBy?: string;
   lastModifiedDate?: Date;
   password?: string;

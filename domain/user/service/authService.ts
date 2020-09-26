@@ -1,26 +1,29 @@
 import { AccountApi } from '../../../api/account';
-import { LoginModel } from '../model';
+import { LoginModel, UserRegister } from '../model';
 import { STORAGE } from '../../../constant/storage'
 import { baseService } from '../../common/service/base.service';
 import { SET_USER_DATA } from '../redux/actions';
 import { cookieUtil } from '../../../util/cookie';
+import { AuthApi } from '../../../api/auth';
+import { accountService } from './accountService';
 
 export interface AuthServiceInterface {
   login: (credentials: LoginModel) => Promise<void>;
   logout: () => void;
-  getUserData: () => Promise<void>;
   activateAccount: (key: string) => Promise<void>;
   startStreaming: () => Promise<boolean>;
+  registerNewUser: (form: UserRegister) => Promise<void>;
 }
 const authService = (): AuthServiceInterface => {
-  const accountApi = new AccountApi();
+  const { getUserData } = accountService()
+  const authApi = new AuthApi();
   const { dispatch, setLoading } = baseService()
   const { setCookie, deleteCookie } = cookieUtil();
 
   const login = async (credentials: LoginModel) => {
     try {
       setLoading(SET_USER_DATA, true)
-      const { id_token } = await accountApi.login(credentials);
+      const { id_token } = await authApi.login(credentials);
       _authenticateSuccess(id_token);
       if (localStorage.getItem(STORAGE.BN_TOKEN)) {
         await getUserData()
@@ -38,21 +41,19 @@ const authService = (): AuthServiceInterface => {
 
   }
 
-  const getUserData = async () => {
+  const registerNewUser = async (form: UserRegister) => {
     try {
-      setLoading(SET_USER_DATA, true);
-      const userdata = await accountApi.getUser()
-      dispatch(SET_USER_DATA, userdata)
+      await authApi.registerAccount(form);
+      localStorage.setItem(STORAGE.TEMP_LOGIN, JSON.stringify(form))
     } catch (e) {
-      throw e
-    } finally {
-      setLoading(SET_USER_DATA, false);
+      throw e;
     }
   }
 
+
   const activateAccount = async (key: string) => {
     try {
-      await accountApi.activateAccount(key)
+      await authApi.activateAccount(key)
     } catch (e) {
       throw e
     }
@@ -80,9 +81,9 @@ const authService = (): AuthServiceInterface => {
   return {
     login,
     logout,
-    getUserData,
     activateAccount,
-    startStreaming
+    startStreaming,
+    registerNewUser
   }
 
 

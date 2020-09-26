@@ -4,14 +4,14 @@ import Head, { HeaderProps } from '../../components/Head';
 import '../../styles/index.less';
 import AppHeader from '../../containers/Header';
 import AppSidebar, { AppSidebarProps } from '../../containers/SideBar';
-import authService from '../../../domain/user/service/authService';
+import { accountService } from '../../../domain/user/service/accountService';
 const { Content } = AntLayout;
 
 interface LayoutProp extends HeaderProps, AppSidebarProps {
 
 }
 const Layout: React.FC<LayoutProp> = (props) => {
-  const { getUserData } = authService()
+  const { getUserData } = accountService()
   useEffect(() => {
     getUserData()
   }, [])

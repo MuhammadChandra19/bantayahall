@@ -9,7 +9,7 @@ interface RegistrationFormInterface extends UserRegister {
 }
 const RegistrationForm = () => {
   const [isSubmiing, setSubmiting] = useState(false);
-  const { register } = userService();
+  const { auth } = userService();
 
   const initialValues: RegistrationFormInterface = {
     email: '',
@@ -23,7 +23,7 @@ const RegistrationForm = () => {
 
     try {
       delete values.confirmationPassword;
-      await register.registerNewUser(values);
+      await auth.registerNewUser(values);
       message.success("Please check your email for activation")
     } catch (e) {
       message.error("Failed to add new user")
