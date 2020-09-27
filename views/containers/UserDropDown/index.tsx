@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Menu, Dropdown, Avatar } from 'antd';
+import { Menu, Dropdown, Avatar, Badge } from 'antd';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import userService from '../../../domain/user/service';
 import { useRouter } from 'next/router';
 import { AppState } from '../../../util/redux/store';
 
 import { useSelector } from 'react-redux';
-import { UserModel } from '../../../domain/user/model';
+
+import { UserState } from '../../../domain/user/redux/states';
+
 
 const UserDropDown = () => {
-  const state = useSelector<AppState, UserModel>(state => state.user.user)
+  const { user, isUserDatacomplete } = useSelector<AppState, UserState>(state => state.user)
   const [isOverlayVisible, showOverlay] = useState(false)
   const { auth: { logout } } = userService();
   const route = useRouter()
@@ -18,11 +20,13 @@ const UserDropDown = () => {
       <Menu>
         <Menu.Item
           onClick={() => {
-            route.push(`/profile/${state.username}`)
+            route.push(`/profile/${user.username}`)
           }}
-          icon={<UserOutlined />}
+          icon={
+            <UserOutlined />
+          }
         >
-          Profile
+          Profile {!isUserDatacomplete && <Badge color="red" />}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -42,13 +46,30 @@ const UserDropDown = () => {
       placement="bottomCenter"
       onVisibleChange={(visible) => showOverlay(visible)}
       visible={isOverlayVisible}
+      overlayStyle={{ marginLeft: 'auto' }}
     >
-      <Avatar
-        size="large"
-        style={{ marginLeft: 'auto' }}
-        icon={<UserOutlined />}
+      {
+        !isUserDatacomplete ? (
+          <Badge
+            style={{ marginLeft: 'auto' }}
+            dot
+          >
+            <Avatar
+              size="large"
+              style={{ marginLeft: 'auto' }}
+              icon={<UserOutlined />}
 
-      />
+            />
+          </Badge>
+        ) : (
+            <Avatar
+              size="large"
+              style={{ marginLeft: 'auto' }}
+              icon={<UserOutlined />}
+
+            />
+          )
+      }
     </Dropdown>
   );
 };

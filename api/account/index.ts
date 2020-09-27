@@ -8,7 +8,12 @@ export class AccountApi extends BaseApi {
   }
 
   public async updateUserData(account: UserMainModel): Promise<void> {
-    return this.make('POST', 'api/account', account)
+    const data = {
+      ...account,
+      login: account.username
+    }
+    delete data.username
+    return this.make('POST', 'api/account', data)
   }
 
   public async getUser(): Promise<UserModel> {

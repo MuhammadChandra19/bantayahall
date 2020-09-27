@@ -3,14 +3,20 @@ import Layout from '../../../views/Layout/MainLayout';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../util/redux/store';
 import { UserModel } from '../../../domain/user/model';
-import { Tabs } from 'antd';
+import { Badge, Tabs } from 'antd';
 import PersonalInfo from '../../../views/containers/PersonalInfo';
+import { UserState } from '../../../domain/user/redux/states';
 const { TabPane } = Tabs
+
+import { useRouter } from 'next/router';
+
 const Profile = () => {
-  const state = useSelector<AppState, UserModel>(state => state.user.user)
+  const { user, isUserDatacomplete } = useSelector<AppState, UserState>(state => state.user)
+  const route = useRouter()
+  const { username } = route.query
   return (
     <Layout
-      pageTitle={`${state.username} - Bantayahall`}
+      pageTitle={`${username} - Bantayahall`}
       description="live stream your favorite band"
 
     >
@@ -27,10 +33,10 @@ const Profile = () => {
           defaultActiveKey="personal-info"
         >
           <TabPane
-            tab="Personal Information"
+            tab={<div>Personal Information {!isUserDatacomplete && <Badge color="red" />} </div>}
             key="personal-info"
           >
-            <PersonalInfo />
+            <PersonalInfo {...user} />
           </TabPane>
           <TabPane
             tab="Personal Ticket"
@@ -42,7 +48,8 @@ const Profile = () => {
         </Tabs>
       </div>
     </Layout>
-  );
+  )
+
 };
 
 export default Profile;

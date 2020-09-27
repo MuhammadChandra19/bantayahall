@@ -1,11 +1,10 @@
-import { AccountApi } from '../../../api/account';
 import { LoginModel, UserRegister } from '../model';
 import { STORAGE } from '../../../constant/storage'
 import { baseService } from '../../common/service/base.service';
 import { SET_USER_DATA } from '../redux/actions';
 import { cookieUtil } from '../../../util/cookie';
 import { AuthApi } from '../../../api/auth';
-import { accountService } from './accountService';
+import accountService from './accountService';
 
 export interface AuthServiceInterface {
   login: (credentials: LoginModel) => Promise<void>;
@@ -17,7 +16,7 @@ export interface AuthServiceInterface {
 const authService = (): AuthServiceInterface => {
   const { getUserData } = accountService()
   const authApi = new AuthApi();
-  const { dispatch, setLoading } = baseService()
+  const { setLoading } = baseService()
   const { setCookie, deleteCookie } = cookieUtil();
 
   const login = async (credentials: LoginModel) => {

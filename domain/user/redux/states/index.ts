@@ -1,5 +1,6 @@
 import { UserModel } from "../../model";
 
 export interface UserState {
-  user: UserModel
+  user: UserModel,
+  isUserDatacomplete: boolean
 }

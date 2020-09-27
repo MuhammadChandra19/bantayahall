@@ -4,16 +4,19 @@ import Head, { HeaderProps } from '../../components/Head';
 import '../../styles/index.less';
 import AppHeader from '../../containers/Header';
 import AppSidebar, { AppSidebarProps } from '../../containers/SideBar';
-import { accountService } from '../../../domain/user/service/accountService';
+
+import userService from '../../../domain/user/service';
+import { useRouter } from 'next/router';
 const { Content } = AntLayout;
 
 interface LayoutProp extends HeaderProps, AppSidebarProps {
 
 }
 const Layout: React.FC<LayoutProp> = (props) => {
-  const { getUserData } = accountService()
+  const { account } = userService()
+  const router = useRouter()
   useEffect(() => {
-    getUserData()
+    account.getUserData()
   }, [])
   return (
     <>
