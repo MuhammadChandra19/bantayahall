@@ -2,7 +2,7 @@ import { message, notification } from "antd";
 import { AccountApi } from "../../../api/account";
 import { baseService } from "../../common/service/base.service"
 import { UserMainModel, UserModel } from "../model";
-import { SET_IS_USER_DATA_COMPLETE, SET_USER_DATA } from "../redux/actions";
+import { IS_UPDATING_USER_DATA, SET_IS_USER_DATA_COMPLETE, SET_USER_DATA } from "../redux/actions";
 
 export interface AccountServiceInterface {
   getUserData: () => Promise<UserModel>;
@@ -28,7 +28,7 @@ const accountService = (): AccountServiceInterface => {
 
   const updateUserData = async (account: UserMainModel) => {
     try {
-      setLoading(SET_USER_DATA, true);
+      setLoading(IS_UPDATING_USER_DATA, true);
       await accountApi.updateUserData(account)
       const prevUserData: UserModel = getState().user.user;
       const updated: UserModel = {
@@ -43,7 +43,7 @@ const accountService = (): AccountServiceInterface => {
     } catch (e) {
       throw e
     } finally {
-      setLoading(SET_USER_DATA, false);
+      setLoading(IS_UPDATING_USER_DATA, false);
     }
   }
 

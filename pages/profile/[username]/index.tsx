@@ -2,18 +2,19 @@ import React from 'react';
 import Layout from '../../../views/Layout/MainLayout';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../util/redux/store';
-import { UserModel } from '../../../domain/user/model';
 import { Badge, Tabs } from 'antd';
 import PersonalInfo from '../../../views/containers/PersonalInfo';
 import { UserState } from '../../../domain/user/redux/states';
 const { TabPane } = Tabs
 
 import { useRouter } from 'next/router';
+import UserTicket from '../../../views/containers/UserTicket';
 
 const Profile = () => {
   const { user, isUserDatacomplete } = useSelector<AppState, UserState>(state => state.user)
   const route = useRouter()
   const { username } = route.query
+
   return (
     <Layout
       pageTitle={`${username} - Bantayahall`}
@@ -42,7 +43,7 @@ const Profile = () => {
             tab="Personal Ticket"
             key="personal-ticket"
           >
-            <p>ticket info</p>
+            <UserTicket />
           </TabPane>
 
         </Tabs>

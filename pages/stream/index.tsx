@@ -24,7 +24,6 @@ export const Stream = (): JSX.Element => {
   const { activeLiveStream } = useSelector<AppState, StreamProps>((state: AppState) => ({
     activeLiveStream: state.liveStream.activeLiveStream,
   }))
-  socketService()
   const router = useRouter()
 
   const clickStreamVideos = (liveStreamData: LiveStreamModel) => {
@@ -40,7 +39,7 @@ export const Stream = (): JSX.Element => {
   }
 
   useEffect(() => {
-    // socketService()
+    socketService()
     getListOfActiveLiveStream()
   }, [])
 

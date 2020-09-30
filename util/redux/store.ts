@@ -18,6 +18,8 @@ import { UserState } from '../../domain/user/redux/states';
 import { UserReducer } from '../../domain/user/redux/reducers';
 import { ConcertsStates } from '../../domain/concert/redux/states';
 import { ConcertsReducer } from '../../domain/concert/redux/reducers';
+import { TicketState } from '../../domain/tickets/redux/states';
+import { TicketReducers } from '../../domain/tickets/redux/reducers';
 
 export interface AppState {
   common: CommonState;
@@ -25,6 +27,7 @@ export interface AppState {
   liveStream: LiveStreamState;
   user: UserState;
   concert: ConcertsStates;
+  ticket: TicketState
 }
 
 const logger: Middleware = () => (next) => (action) => {
@@ -47,6 +50,7 @@ export function configureStore(): Store<AppState> {
     liveStream: new LiveStreamReducer().build(),
     user: new UserReducer().build(),
     concert: new ConcertsReducer().build(),
+    ticket: new TicketReducers().build()
   }
 
   return createStore(

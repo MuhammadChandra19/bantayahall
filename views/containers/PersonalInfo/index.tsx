@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
-import { Row, Col, Avatar, Input, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Avatar, Input, Button, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../util/redux/store';
 import { UserMainModel, UserModel } from '../../../domain/user/model';
 import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { SET_USER_DATA } from '../../../domain/user/redux/actions';
+import { IS_UPDATING_USER_DATA, SET_USER_DATA } from '../../../domain/user/redux/actions';
 import userService from '../../../domain/user/service';
-import { UserState } from '../../../domain/user/redux/states';
 
 const { TextArea } = Input
 
 interface PersonalInfoState {
-  user: UserModel;
-  isSubmitting: boolean
+  isSubmitting: boolean;
+  isUpdating: boolean;
 }
 
-const PersonalInfo: React.FC<any> = () => {
+const PersonalInfo: React.FC<UserModel> = (user) => {
   const { account } = userService()
-  const { isSubmitting, user } = useSelector<AppState, PersonalInfoState>(state => ({
+  const { isSubmitting, isUpdating } = useSelector<AppState, PersonalInfoState>(state => ({
     isSubmitting: state.common.loading[SET_USER_DATA],
-    user: state.user.user
+    isUpdating: state.common.loading[IS_UPDATING_USER_DATA]
   }))
 
   const initialdata: UserMainModel = {
@@ -34,7 +33,7 @@ const PersonalInfo: React.FC<any> = () => {
     username: user.username
   }
 
-  const [data, setData] = useState(initialdata)
+  const [data, setData] = useState({} as UserModel)
 
   const getAvatarProps = () => {
     if (user.imageUrl) {
@@ -46,6 +45,12 @@ const PersonalInfo: React.FC<any> = () => {
       icon: <UserOutlined />
     }
   }
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      setData(initialdata)
+    }
+  }, [])
   const hasFullName = () => {
     return !!user.firstName || !!user.lastName
   }
@@ -61,6 +66,52 @@ const PersonalInfo: React.FC<any> = () => {
       suffix: <InfoCircleOutlined style={{ color: 'red' }} />
     }
   }
+
+  const updateForm = () => {
+    return (
+      <div>
+        <Input
+          placeholder="First name"
+          value={data.firstName}
+          defaultValue={user.firstName}
+          {...warningSuffix(!!user.firstName)}
+          style={{ width: '100%', marginBottom: 15 }}
+          onChange={(e) => setData({ ...data, firstName: e.target.value })}
+        />
+        <Input
+          value={data.lastName}
+          defaultValue={user.lastName}
+          placeholder="Last name"
+          {...warningSuffix(!!user.lastName)}
+          style={{ width: '100%', marginBottom: 15 }}
+          onChange={(e) => setData({ ...data, lastName: e.target.value })}
+        />
+        <Input
+          value={data.phone}
+          defaultValue={user.phone}
+          placeholder="Phone" {...warningSuffix(!!user.phone)}
+          style={{ width: '100%', marginBottom: 15 }}
+          onChange={(e) => setData({ ...data, phone: e.target.value })}
+        />
+        <TextArea
+          value={data?.address || user.address}
+          defaultValue={user.address}
+          placeholder="address"
+          {...warningSuffix(!!user.address)}
+          style={{ width: '100%', marginBottom: 15 }}
+          onChange={(e) => setData({ ...data, address: e.target.value })}
+          rows={4}
+        />
+        <Button
+          type="primary"
+          loading={isUpdating}
+          onClick={() => account.updateUserData(data)}
+        >
+          Save
+        </Button>
+      </div>
+    )
+  }
   return (
     <Row>
       <Col span={7}>
@@ -75,43 +126,9 @@ const PersonalInfo: React.FC<any> = () => {
 
       </Col>
       <Col span={17}>
-        <div>
-          <Input
-            placeholder="First name"
-            value={data.firstName}
-            {...warningSuffix(!!user.firstName)}
-            style={{ width: '100%', marginBottom: 15 }}
-            onChange={(e) => setData({ ...data, firstName: e.target.value })}
-          />
-          <Input
-            value={data.lastName}
-            placeholder="Last name"
-            {...warningSuffix(!!user.lastName)}
-            style={{ width: '100%', marginBottom: 15 }}
-            onChange={(e) => setData({ ...data, lastName: e.target.value })}
-          />
-          <Input
-            value={data.phone}
-            placeholder="Phone" {...warningSuffix(!!user.phone)}
-            style={{ width: '100%', marginBottom: 15 }}
-            onChange={(e) => setData({ ...data, phone: e.target.value })}
-          />
-          <TextArea
-            value={data.address}
-            placeholder="address"
-            {...warningSuffix(!!user.address)}
-            style={{ width: '100%', marginBottom: 15 }}
-            onChange={(e) => setData({ ...data, address: e.target.value })}
-            rows={4}
-          />
-          <Button
-            type="primary"
-            loading={isSubmitting}
-            onClick={() => account.updateUserData(data)}
-          >
-            Save
-          </Button>
-        </div>
+        {
+          isSubmitting ? <Spin /> : updateForm()
+        }
       </Col>
     </Row>
   );
