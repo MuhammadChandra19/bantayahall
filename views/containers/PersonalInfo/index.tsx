@@ -33,7 +33,7 @@ const PersonalInfo: React.FC<UserModel> = (user) => {
     username: user.username
   }
 
-  const [data, setData] = useState({} as UserModel)
+  const [data, setData] = useState(user as UserModel)
 
   const getAvatarProps = () => {
     if (user.imageUrl) {
@@ -48,9 +48,9 @@ const PersonalInfo: React.FC<UserModel> = (user) => {
 
   useEffect(() => {
     if (!isSubmitting) {
-      setData(initialdata)
+      setData(user)
     }
-  }, [])
+  }, [isSubmitting])
   const hasFullName = () => {
     return !!user.firstName || !!user.lastName
   }

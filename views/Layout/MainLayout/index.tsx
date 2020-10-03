@@ -26,6 +26,7 @@ const Layout: React.FC<LayoutProp> = (props) => {
         currentURL={props.currentURL}
         previewImage={props.previewImage}
         siteName={props.siteName}
+        subPath={props.subPath}
       />
       <AntLayout style={{ height: '100vh' }}>
         <AppHeader

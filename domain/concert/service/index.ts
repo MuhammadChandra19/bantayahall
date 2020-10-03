@@ -23,6 +23,15 @@ const concertsService = () => {
     }
   }
 
+  const getConcertById = async (id: any): Promise<ConcertsModel> => {
+    try {
+      const data = await concertsAPI.getConcertById(id);
+      return data
+    } catch (e) {
+      throw e
+    }
+  }
+
   const updateCountTicket = (id: number, count: number) => {
     let tempCount = count < 0 ? 0 : count
     dispatch(UPDATE_TICKET_COUNT, { id, tempCount })
@@ -30,7 +39,8 @@ const concertsService = () => {
 
   return {
     getListConcerts,
-    updateCountTicket
+    updateCountTicket,
+    getConcertById
   }
 }
 

@@ -1,6 +1,6 @@
 import { Reducer, SingleReducer } from "../../../../util/redux/reducer";
 import { LiveStreamState } from "../states"
-import { LiveStreamModel, AddAudience } from "../../interface";
+import { LiveStreamModel, AddAudience, LiveStreamAPIModel } from "../../interface";
 import { Dict } from "../../../../util/types";
 import { ADD_USER_AS_AUDIENCE, SET_LIVE_STREAM_DATA, SET_ACTIVE_LIVE_STREAM, REMOVE_USER_FROM_AUDIENCE, SET_BULK_ACTIVE_LIVE_STREAM } from "../actions";
 
@@ -9,11 +9,11 @@ export class LiveStreamReducer extends Reducer<LiveStreamState> {
   constructor() {
     super({
       activeLiveStream: {},
-      liveData: {} as LiveStreamModel
+      liveData: {} as LiveStreamAPIModel
     })
   }
 
-  public setLiveStreamData(state: LiveStreamState, liveData: LiveStreamModel): LiveStreamState {
+  public setLiveStreamData(state: LiveStreamState, liveData: LiveStreamAPIModel): LiveStreamState {
     return {
       ...state,
       liveData

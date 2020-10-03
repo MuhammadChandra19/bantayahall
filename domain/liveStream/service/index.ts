@@ -1,5 +1,5 @@
 import { LiveStreamAPI } from "../../../api/livestream"
-import { LiveStreamModel, IMessageClient } from "../interface"
+import { LiveStreamModel, IMessageClient, LiveStreamAPIModel } from "../interface"
 import { baseService } from "../../common/service/base.service"
 import { SET_BULK_ACTIVE_LIVE_STREAM, SET_LIVE_STREAM_DATA, JOIN_LIVE_STREAMING_ROOM } from "../redux/actions"
 import { SEND_MESSAGE } from "../../socket /redux/actions"
@@ -35,11 +35,12 @@ const liveStreamService = () => {
     }
   }
 
-  const getLiveStreamById = async (id: string): Promise<void> => {
+  const getLiveStreamById = async (id: any): Promise<LiveStreamAPIModel> => {
     try {
       setLoading(SET_LIVE_STREAM_DATA, true);
       const { data } = await liveStreamAPI.getLiveStreamById(id);
       dispatch(SET_LIVE_STREAM_DATA, data[id]);
+      return data
     } catch (e) {
       throw e
     } finally {

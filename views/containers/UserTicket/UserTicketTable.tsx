@@ -1,12 +1,24 @@
+import { Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import React from 'react';
 import { TicketInterface } from '../../../domain/tickets/interface'
 
-export const columns: ColumnsType<TicketInterface> = [
+
+interface ColumnFunction {
+  openModal: (ticket: TicketInterface) => void;
+  loading: boolean;
+}
+export const columns = ({ openModal, loading }: ColumnFunction): ColumnsType<TicketInterface> => [
   {
-    key: 'concertId',
+    key: 'ticketId',
     title: 'Concert ID',
     dataIndex: 'concertId'
+  },
+  {
+    key: 'concertName',
+    title: 'Concert',
+    dataIndex: 'concertName',
+    render: (text, data) => <Button type="primary" loading={loading} onClick={() => openModal(data)}>{text}</Button>
   },
   {
     key: 'ticketId',

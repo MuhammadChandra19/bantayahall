@@ -46,6 +46,7 @@ const Stream = () => {
   return (
     <Layout
       useDrawer
+      subPath="../"
       pageTitle="Live streaming"
       description="A band live streaming"
     >

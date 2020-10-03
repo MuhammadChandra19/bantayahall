@@ -18,7 +18,7 @@ const Upcoming = () => {
 
 
   const loadDataConcerts = async () => {
-    await getListConcerts({ page: 0, size: 10 });
+    await getListConcerts({ page: 0, size: 20 });
   }
 
   const buyTicketConfirmation = (concertId: number, qty: number) => {

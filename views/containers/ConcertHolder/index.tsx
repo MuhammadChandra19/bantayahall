@@ -43,7 +43,7 @@ const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx, onDecre
   return (
     <div className='concert-holder' key={idx}>
       <Row>
-        <Col xl={20} sm={6}>
+        <Col span={20}>
           <img className="concert-holder--image" src={concert.image ? concert.image : '../image/ticket.jpg'} alt="ticket" />
           <div className="concert-holder--content">
             <div className="concert-holder--content--main">
@@ -57,7 +57,7 @@ const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx, onDecre
             </div>
           </div>
         </Col>
-        <Col xl={4}>
+        <Col span={4}>
           <div className="concert-holder--action">
             <h1 className="concert-holder--action--price">{convertPrice()}</h1>
             <img src="image/BNTHLL-LOGO-min.png" />

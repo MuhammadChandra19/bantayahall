@@ -1,7 +1,7 @@
-import { LiveStreamModel } from "../../interface";
+import { LiveStreamAPIModel, LiveStreamModel } from "../../interface";
 import { Dict } from "../../../../util/types";
 
 export interface LiveStreamState {
-  liveData: LiveStreamModel;
+  liveData: LiveStreamAPIModel;
   activeLiveStream: Dict<LiveStreamModel>;
 }

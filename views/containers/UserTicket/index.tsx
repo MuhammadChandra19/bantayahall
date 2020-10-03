@@ -1,6 +1,11 @@
-import { Table } from 'antd';
-import React, { useEffect } from 'react';
+import { Button, Card, Table } from 'antd';
+import Modal from 'antd/lib/modal/Modal';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ConcertsModel } from '../../../domain/concert/interface';
+import concertsService from '../../../domain/concert/service';
+import { SET_LIVE_STREAM_DATA } from '../../../domain/liveStream/redux/actions';
+import liveStreamService from '../../../domain/liveStream/service';
 import { TicketInterface } from '../../../domain/tickets/interface';
 import { SET_TICKET_LIST } from '../../../domain/tickets/redux/actions';
 import ticketService from '../../../domain/tickets/service';
@@ -9,25 +14,66 @@ import { columns } from './UserTicketTable'
 
 interface UserTicketState {
   history: Array<TicketInterface>
-  isLoading: boolean
+  isLaodingHistory: boolean
+  isLoadingLiveStreamData: boolean
 }
 const UserTicket = () => {
-  const { history, isLoading } = useSelector<AppState, UserTicketState>(state => ({
+  const { history, isLaodingHistory, isLoadingLiveStreamData } = useSelector<AppState, UserTicketState>(state => ({
     history: state.ticket.ticketHistory,
-    isLoading: state.common.loading[SET_TICKET_LIST]
+    isLaodingHistory: state.common.loading[SET_TICKET_LIST],
+    isLoadingLiveStreamData: state.common.loading[SET_LIVE_STREAM_DATA]
   }))
   const { getUserTicketHistory } = ticketService()
+  const { getLiveStreamById } = liveStreamService()
+  const [isVisible, setModalVisibility] = useState(false)
+  const [concertData, setConcertData] = useState({} as ConcertsModel)
+  const [isLiveStreamAvailable, setLiveAvailability] = useState(false)
 
+  const populateModalByLiveStreamInfo = async (ticket: TicketInterface) => {
+    try {
+      const data = await concertsService().getConcertById(ticket.concertId)
+      console.log(data)
+      // const data = await getLiveStreamById(ticket.concertId);
+      // setLiveAvailability(Object.keys(data).length > 0)
+      setConcertData(data)
+      setModalVisibility(true)
+    } catch {
+
+    } finally {
+
+    }
+  }
   useEffect(() => {
     getUserTicketHistory()
   }, [])
   return (
-    <Table<TicketInterface>
-      columns={columns}
-      dataSource={history}
-      pagination={false}
-      loading={isLoading}
-    />
+    <>
+      <Table<TicketInterface>
+        columns={columns({
+          openModal: populateModalByLiveStreamInfo,
+          loading: isLoadingLiveStreamData
+        })}
+        rowKey='ticketId'
+        dataSource={history}
+        pagination={false}
+        loading={isLaodingHistory}
+      />
+      <Modal
+        visible={isVisible}
+        footer={null}
+        bodyStyle={{ padding: 0 }}
+        onCancel={() => setModalVisibility(false)}
+
+      >
+        <Card
+          style={{ width: '100%' }}
+          cover={<img src="../image/ticket.jpg" />}
+        >
+          <Card.Meta style={{ textAlign: 'center' }} title={concertData.concertName} description={concertData.concertDesc} />
+        </Card>
+        <Button disabled={isLiveStreamAvailable} style={{ width: '100%' }} type="primary">Watch now</Button>
+      </Modal>
+    </>
   );
 };
 

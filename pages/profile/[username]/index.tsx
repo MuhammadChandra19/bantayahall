@@ -19,7 +19,7 @@ const Profile = () => {
     <Layout
       pageTitle={`${username} - Bantayahall`}
       description="live stream your favorite band"
-
+      subPath="../"
     >
       <div
         style={{
