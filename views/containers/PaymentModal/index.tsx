@@ -10,8 +10,11 @@ interface PaymentModalInterface {
 const PaymentModal: React.FC<PaymentModalInterface> = ({ visible, onClose }) => {
   useEffect(() => {
     const { socket } = socketService();
-    socket.on("PAYMENT_PUSH", (message) => {
-      notification.success(message)
+    socket.on("PAYMENT_PUSH", ({ _, message }) => {
+      notification.success({
+        message: 'Success',
+        description: message
+      })
     })
     console.log(socket.id)
   }, [])
