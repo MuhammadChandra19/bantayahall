@@ -27,7 +27,7 @@ const Home = () => {
   return (
     <LandingLayout
       pageTitle="Stream on Bantayahall"
-      description="Stream your favourite music on Bantayahall"
+      description="Nonton acara dan musik live di Bantayahall"
     >
       <section className="hero">
         <Carousel autoplay>

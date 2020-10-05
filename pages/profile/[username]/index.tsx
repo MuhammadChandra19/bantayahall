@@ -34,13 +34,13 @@ const Profile = () => {
           defaultActiveKey="personal-info"
         >
           <TabPane
-            tab={<div>Personal Information {!isUserDatacomplete && <Badge color="red" />} </div>}
+            tab={<div>Informasi Pribadi {!isUserDatacomplete && <Badge color="red" />} </div>}
             key="personal-info"
           >
             <PersonalInfo {...user} />
           </TabPane>
           <TabPane
-            tab="Personal Ticket"
+            tab="History Pembelian Tiket"
             key="personal-ticket"
           >
             <UserTicket />

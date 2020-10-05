@@ -20,11 +20,11 @@ const ActivationAccount = () => {
       if (result) {
         router.push("/stream");
       } else {
-        message.error("something went wrong, please try again");
+        message.error("Terjadi kesalahan pada server, mohon coba kembali");
       }
 
     } catch (e) {
-      message.error("something went wrong, please try again");
+      message.error("Terjadi kesalahan pada server, mohon coba kembali");
     } finally {
       setLoading(false)
     }
@@ -35,7 +35,7 @@ const ActivationAccount = () => {
       await activateAccount(key as string);
     } catch (e) {
       setError(true);
-      message.error("something went wrong, please try again");
+      message.error("Terjadi kesalahan pada server, mohon coba kembali");
     }
   }
 
@@ -48,14 +48,14 @@ const ActivationAccount = () => {
       status="500"
       title="500"
       subTitle="Sorry, something went wrong."
-      extra={<Button type="primary" onClick={() => router.replace('/')}>Back Home</Button>}
+      extra={<Button type="primary" onClick={() => router.replace('/')}>Kembali ke beranda</Button>}
     />
   )
 
   const successState = (
     <React.Fragment>
       <Avatar size={40} src="../image/BNTHLL-LOGO.png" />
-      <h3>Your account has been activated</h3>
+      <h3>Akun anda berhasil di aktfkan</h3>
 
       <Button
         style={{ margin: 5, width: '100%' }}
@@ -63,7 +63,7 @@ const ActivationAccount = () => {
         onClick={goToStream}
         loading={isLoading}
       >
-        Start streaming!!
+        Mulai menonton!!
       </Button>
     </React.Fragment>
   )

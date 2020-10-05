@@ -22,7 +22,7 @@ const LoginForm = () => {
       await auth.login(values);
       router.push("/stream");
     } catch (e) {
-      message.error("Failed to login please try again")
+      message.error("Login gagal, mohon coba kembali")
     } finally {
       setSubmiting(false)
     }
@@ -61,7 +61,7 @@ const LoginForm = () => {
       >
         Submit
       </Button>
-      <span style={{ color: 'grey', margin: 5 }}>don't have account?.. <a href="/register">Register</a></span>
+      <span style={{ color: 'grey', margin: 5 }}>Tidak punya akun?.. <a href="/register">Daftar</a></span>
     </form>
   );
 };

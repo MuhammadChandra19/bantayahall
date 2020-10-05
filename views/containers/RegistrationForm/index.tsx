@@ -24,9 +24,9 @@ const RegistrationForm = () => {
     try {
       delete values.confirmationPassword;
       await auth.registerNewUser(values);
-      message.success("Please check your email for activation")
+      message.success("Mohon cek email anda untuk aktifasi akun")
     } catch (e) {
-      message.error("Failed to add new user")
+      message.error("Gagal menambahkan pengguna baru, mohon coba kembali")
     } finally {
       setSubmiting(false)
     }

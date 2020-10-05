@@ -72,7 +72,7 @@ export const Stream = (): JSX.Element => {
 
     <Layout
       pageTitle="Bantayahall"
-      description="live stream your favorite band"
+      description="Nonton band atau acara favorit kamu secara langsung"
 
     >
       <Row style={{ padding: 5 }} gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>

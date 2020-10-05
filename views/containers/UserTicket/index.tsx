@@ -71,7 +71,7 @@ const UserTicket = () => {
         >
           <Card.Meta style={{ textAlign: 'center' }} title={concertData.concertName} description={concertData.concertDesc} />
         </Card>
-        <Button disabled={isLiveStreamAvailable} style={{ width: '100%' }} type="primary">Watch now</Button>
+        <Button disabled={isLiveStreamAvailable} style={{ width: '100%' }} type="primary">Nonton Sekarang</Button>
       </Modal>
     </>
   );

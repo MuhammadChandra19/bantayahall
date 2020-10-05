@@ -72,7 +72,7 @@ const Upcoming = () => {
   return (
     <Layout
       pageTitle="Bantayahall - Upcoming Event"
-      description="Buy your favorite band ticket"
+      description="Event yang akan datang di Bantayahall"
 
     >
       <Row gutter={[8, 8]}>
