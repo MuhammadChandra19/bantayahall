@@ -1,13 +1,17 @@
-import { Collapse, Modal, notification } from 'antd';
+import { ArrowUpOutlined } from '@ant-design/icons';
+import { Button, Collapse, Modal, notification } from 'antd';
 import React, { useEffect } from 'react';
 import socketService from '../../../domain/socket /service';
+import { toCurrency } from '../../../util/converter/currency';
+import '../../styles/containers/paymentModal.less'
 const { Panel } = Collapse;
 interface PaymentModalInterface {
   visible: boolean;
+  totalPayment: number;
   onClose: () => void;
 
 }
-const PaymentModal: React.FC<PaymentModalInterface> = ({ visible, onClose }) => {
+const PaymentModal: React.FC<PaymentModalInterface> = ({ visible, onClose, totalPayment }) => {
   useEffect(() => {
     const { socket } = socketService();
     socket.on("PAYMENT_PUSH", ({ _, message }) => {
@@ -19,34 +23,41 @@ const PaymentModal: React.FC<PaymentModalInterface> = ({ visible, onClose }) => 
     console.log(socket.id)
   }, [])
 
-  const renderPanel = (image: string, content: React.ReactNode) => (
+  const renderPanel = (content: React.ReactNode, image: string = null) => (
     <span>
-      <img src={image} style={{ width: 75 }} />
+      {image && <img src={image} style={{ width: 75, }} />}
       {content}
     </span>
   )
+
+  const renderHeaderTotal = () => (
+    <div style={{ display: 'block' }}>
+      <p style={{ marginBottom: 0, fontSize: 12, color: 'blue' }}>Total</p>
+      {toCurrency("RP", totalPayment)}
+    </div>
+  )
   return (
     <Modal
+      className="payment-modal"
       title="Ticket Confirmation"
       visible={visible}
       onCancel={onClose}
       footer={null}
     >
       <Collapse
-        defaultActiveKey={['1']}
         onChange={() => { }}
         expandIconPosition="right"
       >
-        <Panel key="1" header={renderPanel("../image/bca.png", <div>Manual transfer</div>)}>
-          <div>bayar dengan transfer</div>
+        <Panel key="1" header={renderPanel(<div>Pay with manual transfer</div>, "../image/bca.png")}>
+          <div>Pay with manual transfer</div>
         </Panel>
-        <Panel key="2" header={renderPanel("../image/gopay.png", <div>Gopay</div>)}>
-          <div>bayar dengan gopay</div>
+        <Panel key="2" header={renderPanel(<div>Scan Barcode with your Gojek Application</div>, "../image/gopay.png")}>
+          <div>Scan Barcode with your Gojek Application</div>
+        </Panel>
+        <Panel key="3" header={renderPanel(renderHeaderTotal())}>
+          <div>Scan Barcode with your Gojek Application</div>
         </Panel>
       </Collapse>
-      <div>
-        <h3>Total</h3>
-      </div>
     </Modal>
   );
 };

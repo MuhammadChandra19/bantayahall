@@ -17,13 +17,13 @@ const Upcoming = () => {
   const { buyConcertTicket } = ticketService()
   const [paymentVisible, setPaymentvisibility] = useState(false)
   const dataConcerts = useSelector<AppState, Dict<ConcertsModel>>(state => state.concert.availableConcerts)
-
+  const [totalPayment, setTotalPayment] = useState(0)
 
   const loadDataConcerts = async () => {
     await getListConcerts({ page: 0, size: 20 });
   }
 
-  const buyTicketConfirmation = (concertId: number, qty: number) => {
+  const buyTicketConfirmation = (concertId: number, qty: number, price: number) => {
     // confirm({
     //   title: 'Ticket Confirmation',
     //   icon: <img
@@ -47,6 +47,7 @@ const Upcoming = () => {
     //       })
     //   }
     // })
+    setTotalPayment((price * qty) + 2000)
     setPaymentvisibility(true)
   }
 
@@ -79,7 +80,7 @@ const Upcoming = () => {
           Object.values(dataConcerts).map(concertHolder)
         }
       </Row>
-      <PaymentModal visible={paymentVisible} onClose={() => setPaymentvisibility(false)} />
+      <PaymentModal visible={paymentVisible} onClose={() => setPaymentvisibility(false)} totalPayment={totalPayment} />
     </Layout>
   );
 };

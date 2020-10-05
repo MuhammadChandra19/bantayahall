@@ -12,7 +12,7 @@ interface ConcertHolderInterface {
   concert: ConcertsModel;
   idx: number;
   onDecrementIcrementTicket: (id: number, count: number) => void
-  onConfirmationBuying: (id: number, qty: number) => void
+  onConfirmationBuying: (id: number, qty: number, price: number) => void
 }
 const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx, onDecrementIcrementTicket, onConfirmationBuying }) => {
   const ticket = useSelector<AppState, number>(state => state.concert.availableConcerts[concert.concertId].count)
@@ -72,7 +72,7 @@ const ConcertHolder: React.FC<ConcertHolderInterface> = ({ concert, idx, onDecre
                 />
               </div>
               <Button
-                onClick={() => onConfirmationBuying(concert.concertId, ticket - initialCount)}
+                onClick={() => onConfirmationBuying(concert.concertId, ticket - initialCount, concert.concertPrice)}
                 type="primary"
                 disabled={ticket - initialCount === 0}
               >Buy</Button>
