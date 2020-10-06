@@ -1,4 +1,4 @@
-import { Button, Card, Table } from 'antd';
+import { Button, Card, message, Table } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -28,20 +28,25 @@ const UserTicket = () => {
   const [isVisible, setModalVisibility] = useState(false)
   const [concertData, setConcertData] = useState({} as ConcertsModel)
   const [isLiveStreamAvailable, setLiveAvailability] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+  const [hasError, setError] = useState(false)
 
   const populateModalByLiveStreamInfo = async (ticket: TicketInterface) => {
-    try {
-      const data = await concertsService().getConcertById(ticket.concertId)
-      console.log(data)
-      // const data = await getLiveStreamById(ticket.concertId);
-      // setLiveAvailability(Object.keys(data).length > 0)
+    setLoading(true)
+    Promise.all([
+      concertsService().getConcertById(ticket.concertId),
+      getLiveStreamById(ticket.concertId)
+    ]).then((results) => {
+      const [data, liveStream] = results
+      setLiveAvailability(!!data && !!liveStream)
       setConcertData(data)
       setModalVisibility(true)
-    } catch {
-
-    } finally {
-
-    }
+    }).catch(() => {
+      setError(true)
+      message.error('Tidak dapat mengambil data untuk saat ini')
+    }).finally(() => {
+      setLoading(false)
+    })
   }
   useEffect(() => {
     getUserTicketHistory()
@@ -51,7 +56,6 @@ const UserTicket = () => {
       <Table<TicketInterface>
         columns={columns({
           openModal: populateModalByLiveStreamInfo,
-          loading: isLoadingLiveStreamData
         })}
         rowKey='ticketId'
         dataSource={history}
@@ -68,6 +72,7 @@ const UserTicket = () => {
         <Card
           style={{ width: '100%' }}
           cover={<img src="../image/ticket.jpg" />}
+          loading={isLoading}
         >
           <Card.Meta style={{ textAlign: 'center' }} title={concertData.concertName} description={concertData.concertDesc} />
         </Card>

@@ -28,9 +28,17 @@ const ticketService = () => {
     }
   }
 
-  const buyConcertTicket = async (ticket: BuyTicketInterface): Promise<void> => {
+  const generatePaymentMethods = async (ticket: BuyTicketInterface): Promise<any> => {
     try {
-      await ticketAPI.buyTickets(ticket);
+      const key = `${ticket.concertId}${ticket.pgwType}${ticket.qty}`
+      const unfinisedPayment = JSON.parse(localStorage.getItem(key))
+      if (!!unfinisedPayment) {
+        return unfinisedPayment
+      } else {
+        const data = await ticketAPI.generatePayments(ticket);
+        localStorage.setItem(key, JSON.stringify(data))
+        return data;
+      }
     } catch (e) {
       throw e;
     }
@@ -38,7 +46,7 @@ const ticketService = () => {
 
   return {
     getUserTicket,
-    buyConcertTicket,
+    generatePaymentMethods,
     getUserTicketHistory
   }
 }

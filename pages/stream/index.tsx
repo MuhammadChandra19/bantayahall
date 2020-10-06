@@ -7,12 +7,11 @@ import { useSelector } from "react-redux"
 import { AppState } from "../../util/redux/store"
 import { Card, Avatar, Row, Col } from "antd"
 import { Dict } from "../../util/types"
-// import socketService from "../../domain/socket/service"
 import { useRouter } from 'next/router'
 import liveStreamService from "../../domain/liveStream/service"
-import socketService from "../../domain/socket /service"
+import socketService from "../../domain/socket/service"
 import { STORAGE } from "../../constant/storage"
-
+import Router from 'next/router';
 const { Meta } = Card;
 
 interface StreamProps {
@@ -39,8 +38,11 @@ export const Stream = (): JSX.Element => {
   }
 
   useEffect(() => {
-    socketService()
+    const { socket } = socketService()
     getListOfActiveLiveStream()
+    return () => {
+      socket.disconnect()
+    }
   }, [])
 
 

@@ -24,6 +24,12 @@
     ".next",
     "out"
   ],
+  "paths": {
+    "*": [
+      "node_modules/*",
+      "src/utils/*"
+    ]
+  },
   "include": [
     "next-env.d.ts",
     "**/*.ts",

@@ -3,6 +3,7 @@ import { Layout as AntLayout, Drawer, Button, Menu } from 'antd';
 import { useSelector } from 'react-redux';
 import { LayoutState } from '../../../domain/layout/redux/states';
 import { AppState } from '../../../util/redux/store';
+import Link from 'next/link'
 
 import layoutService from '../../../domain/layout/service';
 import { AlertOutlined, PlayCircleOutlined } from '@ant-design/icons';
@@ -35,8 +36,16 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
       activeKey={activeSideBarMenu}
       selectedKeys={[activeSideBarMenu]}
     >
-      <Menu.Item key="1" icon={<PlayCircleOutlined />} onClick={() => router.push("/stream")}> Stream</Menu.Item>
-      <Menu.Item key="2" icon={<AlertOutlined />} onClick={() => router.push("/upcoming")}> Upcoming</Menu.Item>
+      <Menu.Item key="1" icon={<PlayCircleOutlined />}>
+        <Link href="/stream">
+          Stream
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="2" icon={<AlertOutlined />}>
+        <Link href="/upcoming">
+          Upcoming
+        </Link>
+      </Menu.Item>
     </Menu>
   )
   return (

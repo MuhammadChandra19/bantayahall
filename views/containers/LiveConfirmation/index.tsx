@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Input, Select, Button, message } from 'antd';
 import '../../styles/containers/liveStreamConfirmation.less';
-// import socketService from '../../../domain/socket/service';
 import { LiveType } from '../../../domain/liveStream/interface';
 import CopyClipBoard from '../../components/CopyClipBoard';
 import liveStreamService from '../../../domain/liveStream/service';

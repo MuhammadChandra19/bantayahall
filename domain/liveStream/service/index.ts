@@ -2,7 +2,7 @@ import { LiveStreamAPI } from "../../../api/livestream"
 import { LiveStreamModel, IMessageClient, LiveStreamAPIModel } from "../interface"
 import { baseService } from "../../common/service/base.service"
 import { SET_BULK_ACTIVE_LIVE_STREAM, SET_LIVE_STREAM_DATA, JOIN_LIVE_STREAMING_ROOM } from "../redux/actions"
-import { SEND_MESSAGE } from "../../socket /redux/actions"
+import { SEND_MESSAGE } from "../../socket/redux/actions"
 import { SocketQueue } from "../../../api/socketQueue"
 
 const liveStreamService = () => {

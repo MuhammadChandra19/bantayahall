@@ -3,56 +3,73 @@ import Layout from '../../views/Layout/MainLayout';
 import concertsService from '../../domain/concert/service';
 import { ConcertsModel } from '../../domain/concert/interface';
 import ConcertHolder from '../../views/containers/ConcertHolder';
-import { Row, Col, Modal } from 'antd';
+import { Row, Col, notification, message } from 'antd';
 import { AppState } from '../../util/redux/store';
 import { useSelector } from 'react-redux';
 import { Dict } from '../../util/types';
-import ticketService from '../../domain/tickets/service';
 import PaymentModal from '../../views/containers/PaymentModal';
+import socketService from '../../domain/socket/service';
+import ticketService from '../../domain/tickets/service';
+import { BuyTicketInterface, PaymentType } from '../../domain/tickets/interface';
 
 
-const { confirm } = Modal
 const Upcoming = () => {
   const { getListConcerts, updateCountTicket } = concertsService();
-  const { buyConcertTicket } = ticketService()
+  const { generatePaymentMethods } = ticketService()
   const [paymentVisible, setPaymentvisibility] = useState(false)
   const dataConcerts = useSelector<AppState, Dict<ConcertsModel>>(state => state.concert.availableConcerts)
   const [totalPayment, setTotalPayment] = useState(0)
+  const [socketId, setSocketId] = useState('')
+  const [objTicket, setObjTicket] = useState(null as BuyTicketInterface)
+  const [gopayQr, setGopayQr] = useState(null)
+  const [isLoading, setLoading] = useState(false)
+  const [isError, setError] = useState(false)
 
   const loadDataConcerts = async () => {
     await getListConcerts({ page: 0, size: 20 });
   }
 
-  const buyTicketConfirmation = (concertId: number, qty: number, price: number) => {
-    // confirm({
-    //   title: 'Ticket Confirmation',
-    //   icon: <img
-    //     style={{
-    //       float: 'left',
-    //       width: 20,
-    //       margin: 'auto',
-    //       WebkitFilter: 'grayscale(100%)',
-    //       filter: 'grayscale(100%)'
-    //     }}
-    //     src="image/BNTHLL-LOGO-min.png"
-    //   />,
-    //   content: <p style={{ marginLeft: 20 }}>proceed to buy {qty} {qty > 1 ? 'tickets' : 'ticket'}?</p>,
-    //   async onOk() {
-    //     return buyConcertTicket({ concertId, qty })
-    //       .then(() => {
-    //         Modal.success({
-    //           title: `Success buy ${qty > 1 ? 'tickets' : 'ticket'}`,
-    //           content: 'Please check your email to confirm your payment'
-    //         })
-    //       })
-    //   }
-    // })
-    setTotalPayment((price * qty) + 2000)
+  const buyTicketConfirmation = async (id: number, qty: number, price: number) => {
+    const ticket: BuyTicketInterface = { concertId: id, pgwType: null, qty, socketKey: socketId }
+    setObjTicket(ticket)
     setPaymentvisibility(true)
+    setTotalPayment((price * qty) + 2000)
+  }
+
+  const buyTicket = async (pgwType: PaymentType) => {
+    try {
+      setLoading(true)
+      setError(false)
+      const ticket: BuyTicketInterface = { concertId: objTicket.concertId, pgwType, qty: objTicket.qty, socketKey: socketId }
+      const data = await generatePaymentMethods(ticket)
+      if (pgwType === 'GOPAY') {
+        setGopayQr(data.actions[0].url)
+      }
+    } catch (e) {
+      setError(true)
+      message.error('Terjadi kesalahan, mohon coba kembali')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     loadDataConcerts()
+    const { socket } = socketService();
+    socket.on("PAYMENT_PUSH", ({ _, message }) => {
+      notification.success({
+        message: 'Success',
+        description: message
+      })
+      localStorage.removeItem(`${objTicket.concertId}${objTicket.pgwType}${objTicket.qty}`)
+    })
+    socket.on('connect', () => {
+      setSocketId(socket.id)
+    })
+    return () => {
+      console.log('emit')
+      socket.disconnect()
+    }
   }, [])
 
   const concertHolder = (concert: ConcertsModel, idx: number) => {
@@ -61,6 +78,7 @@ const Upcoming = () => {
         <ConcertHolder
           concert={concert}
           idx={idx}
+          loading={isLoading}
           onConfirmationBuying={buyTicketConfirmation}
 
           onDecrementIcrementTicket={updateCountTicket}
@@ -80,7 +98,25 @@ const Upcoming = () => {
           Object.values(dataConcerts).map(concertHolder)
         }
       </Row>
-      <PaymentModal visible={paymentVisible} onClose={() => setPaymentvisibility(false)} totalPayment={totalPayment} />
+      {
+        paymentVisible && (
+          <PaymentModal
+            hasError={isError}
+            qty={objTicket.qty}
+            gopayQr={gopayQr}
+            visible={paymentVisible}
+            onProceed={buyTicket}
+            loading={isLoading}
+            onClose={() => {
+              setGopayQr(null)
+              setPaymentvisibility(false)
+            }
+
+            } totalPayment={totalPayment}
+          />
+        )
+      }
+
     </Layout>
   );
 };

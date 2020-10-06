@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import socketService from '../../../domain/socket /service';
+import socketService from '../../../domain/socket/service';
 import moment from 'moment';
-import { INCOMING_MESSAGE, SERVER_MESSAGE } from '../../../domain/socket /redux/actions';
+import { INCOMING_MESSAGE, SERVER_MESSAGE } from '../../../domain/socket/redux/actions';
 
 import { Input, Button, Comment, Avatar, List, Row, Col, message as antMessage, notification } from 'antd';
 import { UserModel } from '../../../domain/user/model';
@@ -40,7 +40,7 @@ const Chat: React.FC<ChatInterface> = ({ roomId, userData, isFullScreen }) => {
     })
     initEnterLiveRoom()
     return (() => {
-      socket.emit('disconnect');
+      socket.disconnect()
     })
   }, [roomId]);
 

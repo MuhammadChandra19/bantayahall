@@ -7,7 +7,11 @@ export interface TicketInterface {
   userId: number;
 }
 
+export type PaymentType = 'GOPAY' | 'VA_BCA' | 'INDOMARET' | 'ALFAMART' | 'MANUAL'
+
 export interface BuyTicketInterface {
-  concertId?: number;
-  qty?: number;
+  concertId: number;
+  qty: number;
+  pgwType: PaymentType;
+  socketKey: string;
 }

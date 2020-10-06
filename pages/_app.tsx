@@ -23,7 +23,7 @@ class MyApp extends App<Props> {
 
   static async getInitialProps({ Component, ctx }) {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-
+    console.log('reload')
     //Anything returned here can be accessed by the client
     return { pageProps: pageProps };
   }

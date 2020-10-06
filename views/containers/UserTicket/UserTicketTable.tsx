@@ -6,9 +6,8 @@ import { TicketInterface } from '../../../domain/tickets/interface'
 
 interface ColumnFunction {
   openModal: (ticket: TicketInterface) => void;
-  loading: boolean;
 }
-export const columns = ({ openModal, loading }: ColumnFunction): ColumnsType<TicketInterface> => [
+export const columns = ({ openModal }: ColumnFunction): ColumnsType<TicketInterface> => [
   {
     key: 'ticketId',
     title: 'Concert ID',
@@ -18,7 +17,7 @@ export const columns = ({ openModal, loading }: ColumnFunction): ColumnsType<Tic
     key: 'concertName',
     title: 'Concert',
     dataIndex: 'concertName',
-    render: (text, data) => <Button type="primary" loading={loading} onClick={() => openModal(data)}>{text}</Button>
+    render: (text, data) => <Button type="primary" onClick={() => openModal(data)}>{text}</Button>
   },
   {
     key: 'ticketId',
