@@ -1,9 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useFormik } from 'formik';
 import SingleBoxContainer from '../../../../views/components/SingleBoxContainer';
 import { PaymentBaseInterface } from '../../../../domain/payment/interfaces';
-import { validation } from './formValidation';
 import { Button, DatePicker, Input, message } from 'antd';
 import { Dict } from '../../../../util/types';
 import moment from 'moment'
