@@ -51,6 +51,8 @@ const Upcoming = () => {
       message.error('Terjadi kesalahan, mohon coba kembali')
     } finally {
       setLoading(false)
+      setPaymentvisibility(false)
+
     }
   }
 
