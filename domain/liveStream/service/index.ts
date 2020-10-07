@@ -35,11 +35,13 @@ const liveStreamService = () => {
     }
   }
 
-  const getLiveStreamById = async (id: any): Promise<LiveStreamAPIModel> => {
+  const getLiveStreamById = async (id: any): Promise<LiveStreamAPIModel | null> => {
     try {
       setLoading(SET_LIVE_STREAM_DATA, true);
-      const { data } = await liveStreamAPI.getLiveStreamById(id);
-      dispatch(SET_LIVE_STREAM_DATA, data[id]);
+      const { data } = await liveStreamAPI.getLiveStreamById(id) || null;
+      if (data && data[id]) {
+        dispatch(SET_LIVE_STREAM_DATA, data[id]);
+      }
       return data
     } catch (e) {
       throw e

@@ -9,7 +9,7 @@ import { DownCircleOutlined } from '@ant-design/icons';
 const { Panel } = Collapse;
 interface PaymentModalInterface {
   visible: boolean;
-  totalPayment: number;
+  price: number;
   onClose: () => void;
   gopayQr?: string;
   qty: number;
@@ -18,12 +18,29 @@ interface PaymentModalInterface {
   hasError: boolean
 
 }
-const PaymentModal: React.FC<PaymentModalInterface> = ({ visible, onClose, totalPayment, gopayQr = null, qty, loading, hasError, onProceed }) => {
+const PaymentModal: React.FC<PaymentModalInterface> = ({
+  visible,
+  onClose,
+  price,
+  gopayQr = null,
+  qty,
+  loading,
+  hasError,
+  onProceed
+}) => {
   const [selectedPayment, setSelectedPayment] = useState(null as PaymentType)
+  const [totalPayment, setTotalPayment] = useState(price * qty)
 
   const onChecked = (e: RadioChangeEvent, type: PaymentType) => {
     e.stopPropagation()
-    e.target.checked && setSelectedPayment(type)
+    if (e.target.checked) {
+      if (type === "GOPAY") {
+        setTotalPayment(totalPayment + 2000)
+      } else if (totalPayment > (price * qty)) {
+        setTotalPayment(totalPayment - 2000)
+      }
+      setSelectedPayment(type)
+    }
   }
 
   const proceedPayment = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {

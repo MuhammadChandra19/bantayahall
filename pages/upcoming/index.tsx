@@ -18,13 +18,12 @@ const Upcoming = () => {
   const { generatePaymentMethods } = ticketService()
   const [paymentVisible, setPaymentvisibility] = useState(false)
   const dataConcerts = useSelector<AppState, Dict<ConcertsModel>>(state => state.concert.availableConcerts)
-  const [totalPayment, setTotalPayment] = useState(0)
   const [socketId, setSocketId] = useState('')
   const [objTicket, setObjTicket] = useState(null as BuyTicketInterface)
   const [gopayQr, setGopayQr] = useState(null)
   const [isLoading, setLoading] = useState(false)
   const [isError, setError] = useState(false)
-
+  const [ticketPrice, setPrice] = useState(0)
   const loadDataConcerts = async () => {
     await getListConcerts({ page: 0, size: 20 });
   }
@@ -33,7 +32,7 @@ const Upcoming = () => {
     const ticket: BuyTicketInterface = { concertId: id, pgwType: null, qty, socketKey: socketId }
     setObjTicket(ticket)
     setPaymentvisibility(true)
-    setTotalPayment((price * qty) + 2000)
+    setPrice(price)
   }
 
   const buyTicket = async (pgwType: PaymentType) => {
@@ -112,7 +111,8 @@ const Upcoming = () => {
               setPaymentvisibility(false)
             }
 
-            } totalPayment={totalPayment}
+            }
+            price={ticketPrice}
           />
         )
       }

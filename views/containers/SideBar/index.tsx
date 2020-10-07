@@ -38,12 +38,18 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     >
       <Menu.Item key="1" icon={<PlayCircleOutlined />}>
         <Link href="/stream">
-          Stream
+          <a>
+            Stream
+          </a>
+
         </Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<AlertOutlined />}>
         <Link href="/upcoming">
-          Upcoming
+          <a>
+            Upcoming
+          </a>
+
         </Link>
       </Menu.Item>
     </Menu>

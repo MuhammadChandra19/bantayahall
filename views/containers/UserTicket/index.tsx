@@ -1,5 +1,6 @@
 import { Button, Card, message, Table } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ConcertsModel } from '../../../domain/concert/interface';
@@ -33,21 +34,26 @@ const UserTicket = () => {
 
   const populateModalByLiveStreamInfo = async (ticket: TicketInterface) => {
     setLoading(true)
-    Promise.all([
-      concertsService().getConcertById(ticket.concertId),
-      getLiveStreamById(ticket.concertId)
-    ]).then((results) => {
-      const [data, liveStream] = results
-      setLiveAvailability(!!data && !!liveStream)
+    try {
+      const data = await concertsService().getConcertById(ticket.concertId)
+      const liveStream = await getLiveStreamById(ticket.concertId)
       setConcertData(data)
       setModalVisibility(true)
-    }).catch(() => {
+      setLiveAvailability(!!data && !!liveStream)
+    } catch (e) {
       setError(true)
+      console.log(e)
       message.error('Tidak dapat mengambil data untuk saat ini')
-    }).finally(() => {
+    } finally {
       setLoading(false)
-    })
+    }
   }
+
+  const watchNow = () => {
+    const router = useRouter()
+    router.push(`/stream/${concertData.concertId}?isLive=true`)
+  }
+
   useEffect(() => {
     getUserTicketHistory()
   }, [])
@@ -76,7 +82,7 @@ const UserTicket = () => {
         >
           <Card.Meta style={{ textAlign: 'center' }} title={concertData.concertName} description={concertData.concertDesc} />
         </Card>
-        <Button disabled={isLiveStreamAvailable} style={{ width: '100%' }} type="primary">Nonton Sekarang</Button>
+        <Button disabled={!isLiveStreamAvailable} onClick={watchNow} style={{ width: '100%' }} type="primary">Nonton Sekarang</Button>
       </Modal>
     </>
   );
