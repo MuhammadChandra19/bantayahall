@@ -43,6 +43,8 @@ const Upcoming = () => {
       const data = await generatePaymentMethods(ticket)
       if (pgwType === 'GOPAY') {
         setGopayQr(data.actions[0].url)
+      } else if (pgwType === "MANUAL") {
+        message.success('Pembayaran berhasil, mohon check email anda untuk melakukan konfirmasi')
       }
     } catch (e) {
       setError(true)
