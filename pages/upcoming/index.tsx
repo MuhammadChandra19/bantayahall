@@ -51,8 +51,9 @@ const Upcoming = () => {
       message.error('Terjadi kesalahan, mohon coba kembali')
     } finally {
       setLoading(false)
-      setPaymentvisibility(false)
-
+      if (pgwType === "MANUAL") {
+        setPaymentvisibility(false)
+      }
     }
   }
 
@@ -64,7 +65,7 @@ const Upcoming = () => {
         message: 'Success',
         description: message
       })
-      localStorage.removeItem(`${objTicket.concertId}${objTicket.pgwType}${objTicket.qty}`)
+      setPaymentvisibility(false)
     })
     socket.on('connect', () => {
       setSocketId(socket.id)

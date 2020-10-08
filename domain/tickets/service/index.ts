@@ -30,15 +30,8 @@ const ticketService = () => {
 
   const generatePaymentMethods = async (ticket: BuyTicketInterface): Promise<any> => {
     try {
-      const key = `${ticket.concertId}${ticket.pgwType}${ticket.qty}`
-      const unfinisedPayment = JSON.parse(localStorage.getItem(key))
-      if (!!unfinisedPayment) {
-        return unfinisedPayment
-      } else {
-        const data = await ticketAPI.generatePayments(ticket);
-        localStorage.setItem(key, JSON.stringify(data))
-        return data;
-      }
+      const data = await ticketAPI.generatePayments(ticket);
+      return data;
     } catch (e) {
       throw e;
     }

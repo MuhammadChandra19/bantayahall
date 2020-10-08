@@ -4,7 +4,6 @@ import SingleBoxContainer from '../../../../views/components/SingleBoxContainer'
 import { PaymentBaseInterface } from '../../../../domain/payment/interfaces';
 import { Button, DatePicker, Input, message } from 'antd';
 import { Dict } from '../../../../util/types';
-import moment from 'moment'
 import { paymentService } from '../../../../domain/payment/services';
 
 const ConfirmPayment = () => {
