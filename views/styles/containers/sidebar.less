@@ -1,3 +1,22 @@
 .app-sidebar {
   padding: 8px;
 }
+
+.sidebar-bnth--drawer-top {
+  display: none;
+}
+
+@media only screen and (max-width: 541px) {
+  .sidebar-bnth, .sidebar-bnth--drawer-left {
+    display: none;
+  }
+  .ant-drawer.ant-drawer-top.ant-drawer-open.sidebar-bnth--drawer-top {
+    top: 50px;
+    .ant-drawer-body{
+      padding: 0;
+    }
+  }
+  .sidebar-bnth--drawer-top {
+    display: block;
+  }
+}

@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MenuOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import '../../styles/containers/headbar.less'
+import { Drawer } from 'antd';
 
 const HeadBar = () => {
+  const [isDrawerVisible, toggleDrawer] = useState(false)
+  const drawerHeadBar = (
+    <Drawer
+      placement="top"
+      visible={isDrawerVisible}
+      key="top"
+      onClose={() => toggleDrawer(false)}
+      closable={false}
+      className="drawer-headbar"
+    >
+      <ul className="nav-list--drawer">
+        <li className="nav-item--drawer">
+          <a href="#" className="nav-link-1">Home</a>
+        </li>
+        <li className="nav-item--drawer">
+          <a href="/stream" className="nav-link-1">Stream</a>
+        </li>
+        <li className="nav-item--drawer">
+          <a href="#" className="nav-link-1">About</a>
+        </li>
+        <li className="nav-item--drawer">
+          <a href="/login" className="nav-link-1">Login</a>
+        </li>
+      </ul>
+    </Drawer>
+  )
   return (
     <header className="main">
       <div className="container">
@@ -13,8 +40,9 @@ const HeadBar = () => {
             </a>
           </div>
           <div className="menu-icons open">
-            <MenuOutlined />
+            <MenuOutlined onClick={() => toggleDrawer(!isDrawerVisible)} />
           </div>
+          {drawerHeadBar}
           <ul className="nav-list">
             <div className="menu-icons close">
               <CloseCircleOutlined />

@@ -1,30 +1,25 @@
-FROM node:current-alpine AS base
-WORKDIR /base
-COPY package*.json ./
-RUN npm install
-COPY . .
+FROM node:10 as build
 
-FROM base AS build
-ENV NODE_ENV=production
-WORKDIR /build
-COPY --from=base /base ./
-RUN npm run build
+WORKDIR /usr/app
+# Set working directory
 
-FROM node:current-alpine AS production
-ENV NODE_ENV=production
-WORKDIR /app
-COPY --from=build /build/package*.json ./
-COPY --from=build /build/.next ./.next
-COPY --from=build /build/public ./public
-RUN npm install next
-
-
+# Install PM2 globally
 RUN npm install --global pm2
 
-# Expose the listening port
+# Copy package.json and package-lock.json before other files
+# Utilise Docker cache to save re-installing dependencies if unchanged
+COPY package.json .
+COPY package-lock.json .
 
-# Run container as non-root (unprivileged) user
-# The node user is provided in the Node.js Alpine base image
+# Install dependencies
+RUN npm install --production
+
+# Copy all files
+
+COPY . .
+
+RUN npm run build
+
 USER node
 
 

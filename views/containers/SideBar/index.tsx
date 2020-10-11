@@ -55,26 +55,43 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     </Menu>
   )
   return (
-    !useDrawer ? (
-      <Sider
-        collapsible
-        collapsed={isSideBarVisible}
-        onCollapse={() => toggleSideBar(false)}
-        theme="light"
-      >
-        {content()}
-      </Sider>
-    ) :
+    <>
+      {
+        !useDrawer ? (
+          <Sider
+            className="sidebar-bnth"
+            collapsible
+            collapsed={isSideBarVisible}
+            onCollapse={() => toggleSideBar(false)}
+            theme="light"
+          >
+            {content()}
+          </Sider>
+        ) :
+          <Drawer
+            placement="left"
+            className="sidebar-bnth--drawer-left"
+            visible={isSideBarVisible}
+            key="left"
+            closable={false}
+            onClose={() => toggleSideBar(false)}
+          >
+            {content()}
+          </Drawer>
+
+      }
       <Drawer
-        placement="left"
+        placement="top"
+        className="sidebar-bnth--drawer-top"
         visible={isSideBarVisible}
-        key="left"
+        key="top"
         closable={false}
         onClose={() => toggleSideBar(false)}
       >
         {content()}
       </Drawer>
 
+    </>
   );
 };
 
