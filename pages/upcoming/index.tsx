@@ -97,7 +97,7 @@ const Upcoming = () => {
       description="Event yang akan datang di Bantayahall"
 
     >
-      <Row gutter={[8, 8]}>
+      <Row>
         {
           Object.values(dataConcerts).map(concertHolder)
         }

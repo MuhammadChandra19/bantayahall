@@ -70,8 +70,11 @@
         margin:auto;
       }
     }
+    
   }
-
+  .btn-buy{
+    display: none;
+  }
   &--action{
     display: grid;
     align-content: space-between;
@@ -119,4 +122,26 @@
   -webkit-box-shadow: -40px -131px 19px -46px rgba(255,255,255,0.12);
 -moz-box-shadow: -40px -131px 19px -46px rgba(255,255,255,0.12);
 box-shadow: -40px -131px 19px -46px rgba(255,255,255,0.12);
+}
+
+.drawer-upcoming {
+  .ant-drawer-body {
+    padding:0;
+  }
+}
+
+
+@media screen and (max-width: 767px){ 
+  .concert-holder {
+    height: 235px;
+    margin: 5px;
+    .btn-buy{
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .concert-holder--action{
+    display: none;
+  }
 }
