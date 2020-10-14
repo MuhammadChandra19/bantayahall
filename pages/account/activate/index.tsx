@@ -8,7 +8,7 @@ import userService from '../../../domain/user/service';
 const ActivationAccount = () => {
   const router = useRouter();
   const { key } = router.query;
-  const { auth: { activateAccount, startStreaming } } = userService()
+  const { auth: { activateAccount } } = userService()
   const [isError, setError] = useState(false)
   const [isLoading, setLoading] = useState(false)
 
@@ -16,12 +16,13 @@ const ActivationAccount = () => {
   const goToStream = async () => {
     try {
       setLoading(true)
-      const result = await startStreaming()
-      if (result) {
-        router.push("/stream");
-      } else {
-        message.error("Terjadi kesalahan pada server, mohon coba kembali");
-      }
+      router.push("/login");
+      // const result = await startStreaming()
+      // if (result) {
+      //   router.push("/stream");
+      // } else {
+      //   message.error("Terjadi kesalahan pada server, mohon coba kembali");
+      // }
 
     } catch (e) {
       message.error("Terjadi kesalahan pada server, mohon coba kembali");
@@ -32,6 +33,7 @@ const ActivationAccount = () => {
 
   const checkActivationKey = async () => {
     try {
+      setError(false);
       await activateAccount(key as string);
     } catch (e) {
       setError(true);
@@ -63,7 +65,7 @@ const ActivationAccount = () => {
         onClick={goToStream}
         loading={isLoading}
       >
-        Mulai menonton!!
+        Login Sekarang
       </Button>
     </React.Fragment>
   )

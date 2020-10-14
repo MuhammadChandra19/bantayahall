@@ -114,7 +114,7 @@ const PersonalInfo: React.FC<UserModel> = (user) => {
   }
   return (
     <Row>
-      <Col span={7}>
+      <Col xs={24} sm={24} md={24} lg={7} span={7}>
         <div style={{ textAlign: 'center' }}>
           <Avatar size={200} {...getAvatarProps()} style={{ margin: 'auto', display: 'block' }} />
           {
@@ -125,7 +125,7 @@ const PersonalInfo: React.FC<UserModel> = (user) => {
         </div>
 
       </Col>
-      <Col span={17}>
+      <Col xs={24} sm={24} md={24} lg={17}>
         {
           isSubmitting ? <Spin /> : updateForm()
         }

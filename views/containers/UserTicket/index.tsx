@@ -60,6 +60,7 @@ const UserTicket = () => {
   return (
     <>
       <Table<TicketInterface>
+        scroll={{ x: true }}
         columns={columns({
           openModal: populateModalByLiveStreamInfo,
         })}
