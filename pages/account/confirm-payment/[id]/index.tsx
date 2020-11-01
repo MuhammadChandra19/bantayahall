@@ -56,8 +56,6 @@ const ConfirmPayment = () => {
     }
   }
 
-
-
   const createPayment = async () => {
     if (!!!body.paymentDate || !!!body.paymentReference) {
       message.error('Mohon lengkapi form')
