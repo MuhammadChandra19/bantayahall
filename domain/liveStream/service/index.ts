@@ -39,9 +39,7 @@ const liveStreamService = () => {
     try {
       setLoading(SET_LIVE_STREAM_DATA, true);
       const { data } = await liveStreamAPI.getLiveStreamById(id) || null;
-      if (data && data[id]) {
-        dispatch(SET_LIVE_STREAM_DATA, data[id]);
-      }
+      dispatch(SET_LIVE_STREAM_DATA, data);
       return data
     } catch (e) {
       throw e

@@ -6,12 +6,14 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic'
 import { Modal, Input, Button, message } from 'antd';
 import ticketService from '../../../domain/tickets/service';
+import liveStreamService from '../../../domain/liveStream/service';
 
 const Stream = () => {
   const router = useRouter()
   const { id, isLive } = router.query
   const [showTicketConfirmation, setShowTicketConfirmation] = useState(false);
   const [isSubmittingTicketId, setSubmittingTicketId] = useState(false);
+  const { getLiveStreamById } = liveStreamService();
   const [ticketId, setTicketId] = useState("");
   const StreamPlaybackWithNoSSR = dynamic(() => import('../../../views/containers/StreamPlayback'), {
     ssr: false
@@ -37,6 +39,7 @@ const Stream = () => {
 
   useEffect(() => {
     const idTicket = localStorage.getItem(`${id}_bantayahall`);
+    getLiveStreamById(id);
     if (!idTicket) {
       setShowTicketConfirmation(true);
     }
