@@ -107,33 +107,33 @@ const PaymentModal: React.FC<PaymentModalInterface> = ({
               onChange={() => { }}
               expandIconPosition="right"
             >
-              <Panel key="1" header={renderPanel("", "../image/bca.png", "MANUAL")}>
+              <Panel key="1" header={renderPanel("", "../image/mandiri.png", "MANUAL")}>
                 <div>
                   <p style={{ marginBottom: 0, fontSize: 14 }}>Pembayaran dilakukan melalui transfer bank ke rekening :</p>
                   <hr></hr>
                   <table>
                     <tbody>
                       <tr>
-                        <td style={{ width: 120, marginBottom: 0, fontSize: 14 }}>Rekening BCA</td>
+                        <td style={{ width: 120, marginBottom: 0, fontSize: 14 }}>Rekening MANDIRI</td>
                         <td style={{ width: 20, marginBottom: 0, fontSize: 14 }}>:</td>
-                        <td style={{ width: 120, marginBottom: 0, fontSize: 14 }}>2190079999</td>
+                        <td style={{ width: 120, marginBottom: 0, fontSize: 14 }}>157 000 716 9890</td>
                       </tr>
                       <tr>
                         <td>Nama Akun Bank</td>
                         <td>:</td>
-                        <td>Moh Rival Himran</td>
+                        <td>PT. Merdeka Berkah Media</td>
                       </tr>
 
                     </tbody>
                   </table>
                 </div>
               </Panel>
-              <Panel key="2" header={renderPanel("", "../image/gopay.png", "GOPAY")}>
+              {/* <Panel key="2" header={renderPanel("", "../image/gopay.png", "GOPAY")}>
                 <p style={{ marginBottom: 0 }}>
                   Scan Barcode dengan aplikasi GOJEK
             </p>
                 <span style={{ color: 'grey', fontSize: 9, fontStyle: 'italic' }}>* terdapat tambahan biaya admin</span>
-              </Panel>
+              </Panel> */}
               <Panel showArrow={false} key="3" header={renderPanel(renderHeaderTotal(), null, null)}>
                 <div>
                   <p style={{ marginBottom: 0, fontSize: 14 }}>Rincian pembayaran :</p>

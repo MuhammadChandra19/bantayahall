@@ -17,7 +17,9 @@ const ConfirmPayment = () => {
     isValid: false,
     paymentDate: '',
     paymentKey: parseInt(id),
-    paymentReference: ''
+    paymentReference: '',
+    paymentImage: null
+
   }
 
   const [body, setBody] = useState(initialValue)
@@ -42,22 +44,24 @@ const ConfirmPayment = () => {
     return isLt2M
   }
 
-  const getBase64 = (img: File | Blob, callback: (string) => any) => {
+  const getBase64 = (img: File | Blob, callback: (val: string) => any) => {
     const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result))
+    reader.addEventListener('load', () => callback(reader.result as string))
     reader.readAsDataURL(img)
   }
 
   const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, (paymentReference) => setBody({ ...body, paymentReference }))
+      getBase64(info.file.originFileObj, (paymentImage) => {
+        setBody({ ...body, paymentImage: paymentImage.replace('data:image/jpeg;base64,', '') })
+      })
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`)
     }
   }
 
   const createPayment = async () => {
-    if (!!!body.paymentDate || !!!body.paymentReference) {
+    if (!!!body.paymentDate || !!!body.paymentReference || !!!body.paymentImage) {
       message.error('Mohon lengkapi form')
       return;
     }
@@ -89,7 +93,7 @@ const ConfirmPayment = () => {
           <label htmlFor="firstName">Tanggal dan waktu pembayaran</label>
           <DatePicker
             showTime
-            onChange={(date, dateString) => setBody({ ...body, paymentDate: date.toISOString() })}
+            onChange={(date, _) => setBody({ ...body, paymentDate: date.toISOString() })}
             style={{ width: '100%' }}
           />
         </div>
@@ -100,8 +104,9 @@ const ConfirmPayment = () => {
             customRequest={dummyRequest}
             beforeUpload={beforeUpload}
             onChange={handleChange}
+
           >
-            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            <Button icon={<UploadOutlined />} style={{ width: '100%' }}>Click to Upload</Button>
           </Upload>
         </div>
         <Button
