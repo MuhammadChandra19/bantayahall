@@ -114,7 +114,6 @@ const StreamPlayback: React.FC<StreamPlaybackProps> = ({ isLive, mediaId, readyT
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h4 style={{ color: 'white', fontSize: 17 }}>{liveStreamData?.title}</h4>
-                    // <h4 style={{ color: 'white', fontSize: 17 }}>0 views</h4>
                   </div>
                   <p style={{ color: 'white' }}>
                     {liveStreamData?.description}
