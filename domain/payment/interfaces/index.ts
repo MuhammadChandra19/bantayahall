@@ -4,4 +4,5 @@ export interface PaymentBaseInterface {
   paymentReference: string;
   paymentKey: number;
   paymentImage: string;
+  paymentContentType: string;
 }

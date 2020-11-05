@@ -18,7 +18,8 @@ const ConfirmPayment = () => {
     paymentDate: '',
     paymentKey: parseInt(id),
     paymentReference: '',
-    paymentImage: null
+    paymentImage: null,
+    paymentContentType: null
 
   }
 
@@ -53,7 +54,11 @@ const ConfirmPayment = () => {
   const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status === 'done') {
       getBase64(info.file.originFileObj, (paymentImage) => {
-        setBody({ ...body, paymentImage: paymentImage.replace('data:image/jpeg;base64,', '') })
+        setBody({
+          ...body,
+          paymentImage: paymentImage.replace(`data:${info.file.type};base64,`, ''),
+          paymentContentType: info.file.type
+        })
       })
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`)
