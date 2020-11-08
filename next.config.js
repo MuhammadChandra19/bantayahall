@@ -10,7 +10,7 @@ const themeVariables = lessToJS(
 const getEnv = () => {
 
   return {
-    ...envObj[process.env.NODE_ENV]
+    ...envObj[process.env.ENV]
   }
 }
 
