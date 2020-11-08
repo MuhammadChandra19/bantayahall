@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SingleBoxContainer from '../../../../views/components/SingleBoxContainer';
 import { PaymentBaseInterface } from '../../../../domain/payment/interfaces';
 import { Button, DatePicker, Input, message, Upload } from 'antd';
@@ -8,6 +8,7 @@ import { paymentService } from '../../../../domain/payment/services';
 import { UploadOutlined } from '@ant-design/icons';
 import { RcFile, UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
+import { STORAGE } from '../../../../constant/storage';
 
 const ConfirmPayment = () => {
   const [isSubmiing, setSubmiting] = useState(false);
@@ -81,6 +82,13 @@ const ConfirmPayment = () => {
       setSubmiting(false)
     }
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem(STORAGE.BN_TOKEN);
+    if (!token) {
+      router.push('/login');
+    }
+  }, [])
   return (
     <SingleBoxContainer>
       <form >

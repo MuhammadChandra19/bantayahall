@@ -20,4 +20,4 @@ RUN npm install next
 RUN npm install --global pm2
 USER node
 
-CMD [ "pm2-runtime", "npm", "--", "start" ]
+CMD [ "pm2-runtime", "npm", "--", "start-preprod" ]

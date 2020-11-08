@@ -8,7 +8,7 @@ import { json } from "express";
 const socketService = () => {
 
   const { dispatch } = baseService()
-  const socket = io(process.env.NEXT_PUBLIC_SOCKET_QUEUE);
+  const socket = io(process.env.SOCKET_QUEUE);
 
   socket.on(RUNNING_LIVE_STREAM, (liveData: LiveStreamModel) => {
     dispatch(SET_ACTIVE_LIVE_STREAM, { ...liveData });

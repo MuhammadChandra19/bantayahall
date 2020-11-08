@@ -2,10 +2,17 @@ const withLess = require('@zeit/next-less');
 const lessToJS = require('less-vars-to-js');
 const fs = require('fs');
 const path = require('path');
-
+const { envObj } = require('./deploy/env');
 const themeVariables = lessToJS(
   fs.readFileSync(path.resolve(__dirname, './assets/antd-custom.less'), 'utf8')
 );
+
+const getEnv = () => {
+
+  return {
+    ...envObj[process.env.NODE_ENV]
+  }
+}
 
 module.exports = withLess({
   lessLoaderOptions: {
@@ -60,6 +67,7 @@ module.exports = withLess({
 
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
-  }
+  },
+  env: getEnv()
 
 });
