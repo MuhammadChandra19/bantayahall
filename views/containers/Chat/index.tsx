@@ -7,6 +7,7 @@ import { Input, Button, Comment, Avatar, List, Row, Col, message as antMessage, 
 import { UserModel } from '../../../domain/user/model';
 import '../../styles/containers/chat.less';
 import liveStreamService from '../../../domain/liveStream/service';
+import { CommentOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 
@@ -97,7 +98,7 @@ const Chat: React.FC<ChatInterface> = ({ roomId, userData, isFullScreen }) => {
   )
 
   return (
-    <>
+    <div style={{ margin: 10 }}>
 
       <Comment
         avatar={
@@ -107,30 +108,29 @@ const Chat: React.FC<ChatInterface> = ({ roomId, userData, isFullScreen }) => {
           />
         }
         content={
-          <Row>
-            <Col span={19}>
-              <Input
-                onChange={({ target: { value } }) => setMessage(value)}
-                value={message}
-              />
-            </Col>
-            <Col span={4}>
-              <Button
-                htmlType="submit"
-                onClick={e => sendMessage(e as unknown as React.KeyboardEvent<HTMLInputElement>)}
-                type="primary"
-                loading={isSubmittingMessage}
-              >
-                Add Comment
-              </Button>
-            </Col>
-          </Row>
+          <div>
+            <Input
+              onChange={({ target: { value } }) => setMessage(value)}
+              value={message}
+              style={{ width: 'calc(100% - 55px)' }}
+            />
+
+            <Button
+              style={{ width: 45 }}
+              htmlType="submit"
+              onClick={e => sendMessage(e as unknown as React.KeyboardEvent<HTMLInputElement>)}
+              type="primary"
+              loading={isSubmittingMessage}
+            >
+              <CommentOutlined />
+            </Button>
+          </div>
         }
 
       />
       {messages.length > 0 && <CommentList />}
 
-    </>
+    </div>
 
   );
 };

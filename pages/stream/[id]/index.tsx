@@ -41,7 +41,7 @@ const Stream = () => {
     const idTicket = localStorage.getItem(`${id}_bantayahall`);
     getLiveStreamById(id);
     if (!idTicket) {
-      setShowTicketConfirmation(true);
+      // setShowTicketConfirmation(true);
     }
   }, [])
 

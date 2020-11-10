@@ -7,7 +7,7 @@ COPY . .
 FROM base AS build
 WORKDIR /build
 COPY --from=base /base ./
-RUN npm run build
+RUN npm run build:staging
 
 FROM node:current-alpine AS production
 
@@ -20,4 +20,4 @@ RUN npm install next
 RUN npm install --global pm2
 USER node
 
-CMD [ "pm2-runtime", "npm", "--", "start-preprod" ]
+CMD [ "pm2-runtime", "npm", "--", "start" ]
